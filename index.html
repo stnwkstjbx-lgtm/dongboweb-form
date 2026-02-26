@@ -2,9 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>동보웹 — 웹사이트 제작 의뢰서</title>
 <meta name="description" content="소상공인 맞춤 프리미엄 웹사이트 제작 의뢰서. 간편하게 작성하고 카카오톡으로 보내주세요.">
+<meta name="theme-color" content="#3B5998">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 68' fill='none'><rect x='4' y='4' width='72' height='58' rx='12' fill='%233B5998'/><rect x='4' y='4' width='72' height='18' rx='12' fill='%232D4A85'/><rect x='4' y='16' width='72' height='6' fill='%232D4A85'/><circle cx='16' cy='13' r='2.5' fill='%23ff5f57'/><circle cx='24' cy='13' r='2.5' fill='%23febc2e'/><circle cx='32' cy='13' r='2.5' fill='%2328c840'/><rect x='40' y='10.5' width='28' height='5' rx='2.5' fill='rgba(255,255,255,0.1)'/><circle cx='27' cy='38' r='5' fill='%23fff'/><circle cx='28.5' cy='37' r='2' fill='%232D4A85'/><circle cx='29.5' cy='36' r='.8' fill='%23fff'/><circle cx='53' cy='38' r='5' fill='%23fff'/><circle cx='54.5' cy='37' r='2' fill='%232D4A85'/><circle cx='55.5' cy='36' r='.8' fill='%23fff'/><path d='M35 49c2 3.5 8 3.5 10 0' stroke='%23fff' stroke-width='2' stroke-linecap='round' fill='none'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,121 +15,155 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:'Inter','Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;
-  word-break:keep-all;overflow-wrap:break-word;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+  word-break:keep-all;overflow-wrap:break-word;min-height:100vh;
+  padding-bottom:env(safe-area-inset-bottom)}
 input,select,textarea,button{font:inherit;color:inherit}
 
 /* ===== CSS VARIABLES ===== */
 :root{
-  --bg:#FAFAFA;--surface:#FFFFFF;--fg:#0A0A0A;--fg2:#2A2A2A;--fg3:#555;
-  --dim:#888;--dim2:#AAA;--dim3:#CCC;--border:#E2E2E2;--border2:#EEE;
+  --bg:#F5F6FA;--surface:#FFFFFF;--fg:#0A0A0A;--fg2:#2A2A2A;--fg3:#555;
+  --dim:#888;--dim2:#AAA;--dim3:#CCC;--border:#E2E2E2;--border2:#EAECF0;
   --accent:#3B5998;--accent-light:#EBF0FA;--accent-dark:#2D4373;
+  --accent-glow:rgba(59,89,152,.08);
   --success:#22C55E;--success-bg:#F0FDF4;
   --error:#EF4444;--error-bg:#FEF2F2;
-  --radius:12px;--radius-lg:20px;
+  --radius:14px;--radius-lg:22px;
   --font-sans:'Inter','Noto Sans KR',sans-serif;
   --font-mono:'DM Mono','Noto Sans KR',monospace;
   --ease:cubic-bezier(.16,1,.3,1);
-  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --shadow-lg:0 10px 25px rgba(0,0,0,.08),0 4px 10px rgba(0,0,0,.04);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.03);
+  --shadow-md:0 4px 12px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
 }
 
 /* ===== STEP INDICATOR (top bar) ===== */
-.step-indicator{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border2);
-  padding:12px 20px;display:none;align-items:center;gap:12px}
+.step-indicator{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border2);padding:14px 20px;
+  display:none;align-items:center;gap:14px;
+  transition:transform .3s var(--ease)}
 .step-indicator.visible{display:flex}
-.step-indicator-text{font-size:13px;font-weight:600;color:var(--fg2);white-space:nowrap;font-family:var(--font-mono)}
-.step-indicator-bar{flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
-.step-indicator-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s var(--ease)}
-.step-indicator-label{font-size:12px;color:var(--dim);white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.step-indicator-text{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;
+  font-family:var(--font-mono);min-width:42px}
+.step-indicator-bar{flex:1;height:6px;background:var(--border2);border-radius:3px;overflow:hidden}
+.step-indicator-fill{height:100%;background:linear-gradient(90deg,var(--accent),#6B8DD6);
+  border-radius:3px;transition:width .5s var(--ease)}
+.step-indicator-label{font-size:12px;font-weight:500;color:var(--dim);white-space:nowrap;
+  max-width:130px;overflow:hidden;text-overflow:ellipsis}
 
 /* ===== LAYOUT ===== */
-.container{max-width:640px;margin:0 auto;padding:24px 20px 60px}
+.container{max-width:600px;margin:0 auto;padding:24px 20px 80px}
 
 /* ===== HEADER ===== */
-.header{text-align:center;margin-bottom:40px;padding-top:20px}
-.header-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px}
-.header-logo svg{width:40px;height:auto}
-.header-logo span{font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--fg)}
-.header h1{font-size:24px;font-weight:700;letter-spacing:-.03em;margin-bottom:8px;color:var(--fg)}
+.header{text-align:center;margin-bottom:40px;padding-top:24px}
+.header-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:20px;
+  padding:8px 16px 8px 8px;background:var(--surface);border-radius:40px;box-shadow:var(--shadow-md)}
+.header-logo svg{width:36px;height:auto}
+.header-logo span{font-size:16px;font-weight:700;letter-spacing:-.02em;color:var(--fg)}
+.header h1{font-size:26px;font-weight:700;letter-spacing:-.03em;margin-bottom:10px;color:var(--fg)}
 .header p{font-size:14px;color:var(--dim);line-height:1.7}
+.header-badge{display:inline-block;margin-top:16px;padding:6px 14px;border-radius:20px;
+  background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600}
 
 /* ===== STEP SYSTEM ===== */
-.step{display:none;opacity:0;transform:translateY(16px)}
-.step.active{display:block;animation:stepIn .35s var(--ease) forwards}
+.step{display:none;opacity:0;transform:translateY(20px)}
+.step.active{display:block;animation:stepIn .4s var(--ease) forwards}
 @keyframes stepIn{to{opacity:1;transform:translateY(0)}}
 
 /* ===== TIER SELECTION (Step 0) ===== */
-.tier-cards{display:flex;gap:16px;margin-top:8px}
-.tier-card{flex:1;padding:24px 20px;border:2px solid var(--border);border-radius:var(--radius-lg);
-  cursor:pointer;transition:all .25s var(--ease);background:var(--surface);text-align:center;
-  box-shadow:var(--shadow)}
-.tier-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.tier-card.selected{border-color:var(--accent);background:var(--accent-light);box-shadow:0 0 0 3px rgba(59,89,152,.15)}
-.tier-card-name{font-size:20px;font-weight:700;margin-bottom:4px}
-.tier-card-price{font-size:14px;color:var(--dim);margin-bottom:12px}
-.tier-card-desc{font-size:13px;color:var(--fg3);line-height:1.6}
-.tier-card-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;
-  margin-bottom:12px}
+.tier-cards{display:flex;gap:14px;margin-top:12px}
+.tier-card{flex:1;padding:28px 20px;border:2px solid var(--border2);border-radius:var(--radius-lg);
+  cursor:pointer;transition:all .3s var(--ease);background:var(--surface);text-align:center;
+  box-shadow:var(--shadow);position:relative;overflow:hidden}
+.tier-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--accent),#6B8DD6);opacity:0;transition:opacity .3s}
+.tier-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.tier-card:hover::before{opacity:.5}
+.tier-card.selected{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-light) 0%,var(--surface) 100%);
+  box-shadow:0 0 0 3px rgba(59,89,152,.12),var(--shadow-lg)}
+.tier-card.selected::before{opacity:1}
+.tier-card-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;
+  margin-bottom:14px;letter-spacing:.03em;text-transform:uppercase}
 .tier-card[data-tier="light"] .tier-card-badge{background:#E8F5E9;color:#2E7D32}
 .tier-card[data-tier="basic"] .tier-card-badge{background:#E3F2FD;color:#1565C0}
+.tier-card-name{font-size:28px;font-weight:800;margin-bottom:4px;letter-spacing:-.02em}
+.tier-card-price{font-size:13px;color:var(--dim);margin-bottom:14px}
+.tier-card-desc{font-size:13px;color:var(--fg3);line-height:1.6}
+.tier-card-check{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;
+  background:var(--accent);display:none;align-items:center;justify-content:center;
+  animation:popIn .3s var(--ease-bounce)}
+.tier-card.selected .tier-card-check{display:flex}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
 
-/* ===== STEP CONTENT (sections inside steps) ===== */
-.step-content{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+/* ===== STEP CONTENT ===== */
+.step-content{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);
   padding:28px 24px;box-shadow:var(--shadow)}
 .step-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.step-title{font-size:16px;font-weight:700;letter-spacing:-.02em}
-.step-desc{font-size:13px;color:var(--dim);margin-bottom:20px;padding-left:40px}
+.step-num{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6B8DD6);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
+  flex-shrink:0;box-shadow:0 2px 8px rgba(59,89,152,.25)}
+.step-title{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.step-desc{font-size:13px;color:var(--dim);margin-bottom:20px;padding-left:44px}
 
 /* ===== STEP NAVIGATION ===== */
 .step-nav{display:flex;gap:12px;margin-top:24px}
-.step-nav .btn-prev,.step-nav .btn-next{flex:1;padding:14px;border-radius:var(--radius);font-size:15px;
+.step-nav .btn-prev,.step-nav .btn-next{flex:1;padding:15px;border-radius:var(--radius);font-size:15px;
   font-weight:600;cursor:pointer;transition:all .25s var(--ease);display:flex;align-items:center;
-  justify-content:center;gap:6px}
+  justify-content:center;gap:8px}
 .step-nav .btn-prev{border:1px solid var(--border);background:var(--surface);color:var(--fg)}
-.step-nav .btn-prev:hover{border-color:var(--accent);color:var(--accent)}
-.step-nav .btn-next{border:none;background:var(--accent);color:#fff;box-shadow:var(--shadow)}
-.step-nav .btn-next:hover{background:var(--accent-dark);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
-.step-nav .btn-next:active{transform:translateY(0)}
+.step-nav .btn-prev:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.step-nav .btn-next{border:none;background:linear-gradient(135deg,var(--accent),#5A7BC4);
+  color:#fff;box-shadow:0 4px 14px rgba(59,89,152,.3)}
+.step-nav .btn-next:hover{box-shadow:0 6px 20px rgba(59,89,152,.4);transform:translateY(-1px)}
+.step-nav .btn-next:active{transform:translateY(0);box-shadow:0 2px 8px rgba(59,89,152,.25)}
+.step-nav .btn-prev svg,.step-nav .btn-next svg{width:16px;height:16px}
 
 /* ===== FORM FIELDS ===== */
-.field{margin-bottom:16px}
+.field{margin-bottom:18px}
 .field:last-child{margin-bottom:0}
-.field-label{display:block;font-size:13px;font-weight:600;color:var(--fg2);margin-bottom:6px}
+.field-label{display:block;font-size:13px;font-weight:600;color:var(--fg2);margin-bottom:8px}
 .field-label .req{color:var(--error);margin-left:2px}
 .field-hint{font-size:12px;color:var(--dim);margin-top:4px}
-.field-error{font-size:12px;color:var(--error);margin-top:4px;display:none}
-.field.has-error input,.field.has-error select{border-color:var(--error)}
+.field-error{font-size:12px;color:var(--error);margin-top:6px;display:none;
+  animation:shakeIn .3s var(--ease)}
+.field.has-error input,.field.has-error select{border-color:var(--error);
+  box-shadow:0 0 0 3px rgba(239,68,68,.1)}
 .field.has-error .field-error{display:block}
+@keyframes shakeIn{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
 input[type="text"],input[type="tel"],input[type="url"],select,textarea{
-  width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);
-  background:var(--bg);font-size:15px;transition:border-color .2s,box-shadow .2s;outline:none;
+  width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);font-size:15px;transition:all .2s var(--ease);outline:none;
   -webkit-appearance:none;appearance:none}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(59,89,152,.12)}
+  box-shadow:0 0 0 3px rgba(59,89,152,.1);background:var(--surface)}
+input::placeholder,textarea::placeholder{color:var(--dim3)}
 textarea{resize:vertical;min-height:80px}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 
 /* ===== CHECKBOX GROUP ===== */
-.check-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.check-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border);
-  border-radius:var(--radius);cursor:pointer;transition:all .2s;font-size:14px;user-select:none}
-.check-item:hover{border-color:var(--accent);background:var(--accent-light)}
+.check-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.check-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--border);
+  border-radius:var(--radius);cursor:pointer;transition:all .2s var(--ease);font-size:14px;
+  user-select:none;background:var(--surface)}
+.check-item:hover{border-color:var(--accent);background:var(--accent-glow)}
+.check-item:active{transform:scale(.98)}
 .check-item input{display:none}
-.check-item .check-box{width:18px;height:18px;border:2px solid var(--dim3);border-radius:5px;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.check-item input:checked ~ .check-box{background:var(--accent);border-color:var(--accent)}
+.check-item .check-box{width:20px;height:20px;border:2px solid var(--dim3);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease);flex-shrink:0}
+.check-item input:checked ~ .check-box{background:var(--accent);border-color:var(--accent);
+  box-shadow:0 2px 6px rgba(59,89,152,.3)}
 .check-item input:checked ~ .check-box::after{content:'';display:block;width:5px;height:9px;
   border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-.check-item input:checked ~ .check-text{color:var(--accent);font-weight:500}
+.check-item input:checked ~ .check-text{color:var(--accent);font-weight:600}
 
 /* ===== DYNAMIC ROWS ===== */
 .dynamic-rows{display:flex;flex-direction:column;gap:12px}
 .dynamic-row{background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);
-  padding:16px;position:relative}
+  padding:16px;position:relative;transition:all .2s;animation:fadeRow .25s var(--ease)}
+@keyframes fadeRow{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .dynamic-row .row-fields{display:flex;flex-direction:column;gap:10px}
 .dynamic-row input,.dynamic-row textarea{background:var(--surface)}
 .row-inline{display:flex;gap:10px}
@@ -136,15 +171,17 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .btn-remove{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;
   border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;
   align-items:center;justify-content:center;color:var(--dim);transition:all .2s;font-size:16px}
-.btn-remove:hover{background:var(--error-bg);border-color:var(--error);color:var(--error)}
+.btn-remove:hover{background:var(--error-bg);border-color:var(--error);color:var(--error);
+  transform:scale(1.1)}
 
-.btn-add{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;
-  border:1px dashed var(--dim3);border-radius:var(--radius);background:transparent;cursor:pointer;
-  color:var(--dim);font-size:14px;font-weight:500;transition:all .2s}
-.btn-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.btn-add{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:13px;
+  border:2px dashed var(--border);border-radius:var(--radius);background:transparent;cursor:pointer;
+  color:var(--dim);font-size:14px;font-weight:500;transition:all .2s var(--ease)}
+.btn-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
 
 /* ===== CATEGORY BLOCK ===== */
-.category-block{margin-bottom:16px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.category-block{margin-bottom:16px;border:1px solid var(--border2);border-radius:var(--radius);
+  overflow:hidden;animation:fadeRow .25s var(--ease)}
 .category-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg);
   border-bottom:1px solid var(--border2)}
 .category-header input{flex:1;border:none;background:transparent;font-weight:600;font-size:14px;padding:0}
@@ -155,75 +192,102 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .category-items .dynamic-row{padding:12px}
 
 /* ===== PHOTO GUIDE ===== */
-.photo-guide{background:var(--accent-light);border:1px solid rgba(59,89,152,.15);border-radius:var(--radius);
-  padding:16px 18px;margin-bottom:16px}
-.photo-guide p{font-size:14px;color:var(--accent-dark);font-weight:500;margin-bottom:8px}
+.photo-guide{background:linear-gradient(135deg,var(--accent-light),#F0F4FF);
+  border:1px solid rgba(59,89,152,.12);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px}
+.photo-guide p{font-size:14px;color:var(--accent-dark);font-weight:600;margin-bottom:6px}
 .photo-guide .guide-sub{font-size:13px;color:var(--dim);font-weight:400}
-.photo-checklist{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.photo-checklist label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg2);cursor:pointer}
-.photo-checklist input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent)}
+.photo-checklist{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.photo-checklist label{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--fg2);
+  cursor:pointer;padding:6px 0;transition:color .2s}
+.photo-checklist label:hover{color:var(--accent)}
+.photo-checklist input[type="checkbox"]{width:18px;height:18px;accent-color:var(--accent);border-radius:4px}
 
 /* ===== REVIEW STEP ===== */
-.review-section{margin-bottom:16px}
+.review-section{margin-bottom:14px;animation:fadeRow .3s var(--ease)}
 .review-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.review-section-title{font-size:14px;font-weight:700;color:var(--fg)}
-.review-edit-btn{padding:4px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);
-  font-size:12px;color:var(--accent);cursor:pointer;font-weight:500;transition:all .2s}
-.review-edit-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.review-section-title{font-size:13px;font-weight:700;color:var(--dim);text-transform:uppercase;
+  letter-spacing:.04em}
+.review-edit-btn{padding:5px 14px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);
+  font-size:12px;color:var(--accent);cursor:pointer;font-weight:600;transition:all .2s}
+.review-edit-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .review-section-body{background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);
-  padding:14px 16px;font-size:14px;color:var(--fg2);line-height:1.8}
+  padding:16px 18px;font-size:14px;color:var(--fg2);line-height:1.8}
 .review-section-body .review-line{margin-bottom:2px}
-.review-section-body .review-label{font-weight:600;color:var(--fg3);margin-right:4px}
+.review-section-body .review-label{font-weight:600;color:var(--fg3);margin-right:6px}
 .review-section-body .review-sub{margin-left:12px;color:var(--dim)}
-.review-empty{color:var(--dim2);font-style:italic}
 
 /* ===== SUBMIT BUTTONS ===== */
 .btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
-  border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px;
-  font-weight:600;cursor:pointer;transition:all .25s var(--ease);box-shadow:var(--shadow)}
-.btn-primary:hover{background:var(--accent-dark);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+  border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#5A7BC4);
+  color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .25s var(--ease);
+  box-shadow:0 4px 14px rgba(59,89,152,.3)}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(59,89,152,.4);transform:translateY(-1px)}
 .btn-primary:active{transform:translateY(0)}
-.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
-  border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--fg);
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;
+  border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--fg);
   font-size:15px;font-weight:600;cursor:pointer;transition:all .25s var(--ease);box-shadow:var(--shadow)}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow-md);
+  transform:translateY(-1px)}
 .btn-secondary:active{transform:translateY(0)}
-.btn-secondary svg{width:20px;height:20px}
+.btn-secondary svg{width:18px;height:18px}
+.submit-area{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.submit-hint{text-align:center;font-size:12px;color:var(--dim);margin:-4px 0 4px;line-height:1.5}
 
-#btnReset:hover{border-color:var(--error);color:var(--error)}
+#btnReset{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:13px;
+  margin-top:4px;border:1.5px solid var(--border2);border-radius:var(--radius);background:var(--surface);
+  color:var(--dim);font-size:14px;cursor:pointer;transition:all .2s}
+#btnReset:hover{border-color:var(--error);color:var(--error);background:var(--error-bg)}
+#btnReset svg{width:15px;height:15px}
 
-.submit-area{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+/* ===== KAKAO BUTTON ===== */
+.btn-kakao{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
+  border:none;border-radius:var(--radius);background:#FEE500;color:#3C1E1E;font-size:15px;
+  font-weight:700;cursor:pointer;transition:all .25s var(--ease);
+  box-shadow:0 4px 14px rgba(254,229,0,.35)}
+.btn-kakao:hover{box-shadow:0 6px 20px rgba(254,229,0,.5);transform:translateY(-1px)}
+.btn-kakao:active{transform:translateY(0)}
+.btn-kakao svg{width:20px;height:20px}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--fg);color:#fff;padding:14px 24px;border-radius:var(--radius);font-size:14px;
   font-weight:500;z-index:1001;transition:transform .4s var(--ease);white-space:nowrap;
-  box-shadow:0 8px 30px rgba(0,0,0,.2)}
+  box-shadow:0 8px 30px rgba(0,0,0,.2);backdrop-filter:blur(8px)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 /* ===== FOOTER ===== */
-.footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px}
-.footer a{color:var(--accent);text-decoration:none}
+.footer{text-align:center;padding:40px 20px 24px;color:var(--dim2);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none;font-weight:500}
 
 /* ===== AUTOSAVE INDICATOR ===== */
 .autosave{position:fixed;bottom:20px;right:20px;font-size:12px;color:var(--dim2);
-  font-family:var(--font-mono);opacity:0;transition:opacity .3s}
+  font-family:var(--font-mono);opacity:0;transition:opacity .3s;
+  background:var(--surface);padding:6px 12px;border-radius:8px;box-shadow:var(--shadow)}
 .autosave.show{opacity:1}
+
+/* ===== SKIP LINK ===== */
+.skip-hint{text-align:center;margin-top:12px}
+.skip-hint button{border:none;background:none;color:var(--dim2);font-size:12px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px}
+.skip-hint button:hover{color:var(--accent)}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:480px){
-  .container{padding:16px 14px 48px}
-  .step-content{padding:20px 16px}
+  .container{padding:16px 14px 60px}
+  .step-content{padding:22px 18px}
   .check-group{grid-template-columns:1fr}
   .row-inline{flex-direction:column;gap:8px}
-  .header h1{font-size:20px}
+  .header h1{font-size:22px}
   .step-desc{padding-left:0}
   .tier-cards{flex-direction:column;gap:12px}
-  .step-indicator{padding:10px 14px;gap:8px}
+  .tier-card{padding:22px 18px}
+  .step-indicator{padding:10px 14px;gap:10px}
   .step-indicator-label{display:none}
+  .step-nav .btn-prev,.step-nav .btn-next{padding:14px 8px;font-size:14px}
+  .header-badge{margin-top:12px}
 }
 @media(min-width:481px) and (max-width:768px){
-  .container{padding:20px 16px 56px}
+  .container{padding:20px 16px 70px}
 }
 </style>
 </head>
@@ -253,7 +317,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       <span>동보웹</span>
     </div>
     <h1>웹사이트 제작 의뢰서</h1>
-    <p>아래 폼을 작성해주시면<br>맞춤 웹사이트를 제작해드립니다.</p>
+    <p>폼을 작성해주시면<br>맞춤 웹사이트를 제작해드립니다.</p>
+    <div class="header-badge">약 3분 소요</div>
   </header>
 
   <form id="mainForm" novalidate>
@@ -268,21 +333,23 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <p class="step-desc">원하시는 상품을 선택해주세요.</p>
         <div class="tier-cards">
           <div class="tier-card" data-tier="light">
+            <div class="tier-card-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             <div class="tier-card-badge">Light</div>
             <div class="tier-card-name">15만원</div>
             <div class="tier-card-price">단일 페이지</div>
-            <div class="tier-card-desc">5~7개 섹션의 깔끔한 원페이지 웹사이트</div>
+            <div class="tier-card-desc">5~7개 섹션의<br>깔끔한 원페이지 웹사이트</div>
           </div>
           <div class="tier-card" data-tier="basic">
+            <div class="tier-card-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             <div class="tier-card-badge">Basic</div>
             <div class="tier-card-name">25만원</div>
             <div class="tier-card-price">고급 기능 포함</div>
-            <div class="tier-card-desc">8~12개 섹션 + 스태프, 후기, FAQ 등 추가 기능</div>
+            <div class="tier-card-desc">8~12개 섹션 +<br>스태프, 후기, FAQ 등</div>
           </div>
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-next" id="tierNextBtn" style="flex:1;opacity:.4;pointer-events:none">상품을 선택해주세요</button>
+        <button type="button" class="btn-next" id="tierNextBtn" style="flex:1;opacity:.35;pointer-events:none">상품을 선택해주세요</button>
       </div>
     </div>
 
@@ -330,8 +397,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
 
@@ -343,7 +410,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           <div class="step-title">마음에 드는 디자인</div>
         </div>
         <p class="step-desc">참고하고 싶은 디자인을 골라주세요. (복수 선택 가능)</p>
-        <!-- Light templates -->
         <div class="check-group" id="designLight">
           <label class="check-item"><input type="checkbox" value="밀도 (베이커리)" data-save-check><span class="check-box"></span><span class="check-text">밀도</span></label>
           <label class="check-item"><input type="checkbox" value="라루즈 (와인바)" data-save-check><span class="check-box"></span><span class="check-text">라루즈</span></label>
@@ -351,7 +417,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           <label class="check-item"><input type="checkbox" value="뤼느 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">뤼느</span></label>
           <label class="check-item"><input type="checkbox" value="프라임 (수학학원)" data-save-check><span class="check-box"></span><span class="check-text">프라임</span></label>
         </div>
-        <!-- Basic templates -->
         <div class="check-group hidden" id="designBasic">
           <label class="check-item"><input type="checkbox" value="느와르 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">느와르</span></label>
           <label class="check-item"><input type="checkbox" value="블랑 (네일살롱)" data-save-check><span class="check-box"></span><span class="check-text">블랑</span></label>
@@ -361,9 +426,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">잘 모르겠으면 건너뛰기</button></div>
     </div>
 
     <!-- Step 3: 메뉴/서비스 -->
@@ -404,9 +470,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <button type="button" class="btn-add" onclick="addCategory()" style="margin-top:8px">+ 카테고리 추가</button>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">나중에 사진으로 보낼게요</button></div>
     </div>
 
     <!-- Step 4: 위치 & 영업시간 -->
@@ -438,8 +505,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
 
@@ -464,8 +531,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
 
@@ -490,8 +557,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
 
@@ -499,7 +566,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <div class="step basic-only" data-step="staff">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num">+</div>
+          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
           <div class="step-title">스태프 소개</div>
         </div>
         <p class="step-desc">팀원 정보를 입력해주세요.</p>
@@ -518,16 +585,17 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <button type="button" class="btn-add" onclick="addStaff()">+ 스태프 추가</button>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
     </div>
 
     <!-- Basic 전용: 고객 후기 -->
     <div class="step basic-only" data-step="reviews">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num">+</div>
+          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
           <div class="step-title">고객 후기</div>
         </div>
         <p class="step-desc">웹사이트에 넣고 싶은 후기를 적어주세요.</p>
@@ -543,16 +611,17 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <button type="button" class="btn-add" onclick="addReview()">+ 후기 추가</button>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
     </div>
 
     <!-- Basic 전용: FAQ -->
     <div class="step basic-only" data-step="faq">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num">+</div>
+          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
           <div class="step-title">자주 묻는 질문 (FAQ)</div>
         </div>
         <p class="step-desc">고객이 자주 묻는 질문과 답변을 적어주세요.</p>
@@ -568,9 +637,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <button type="button" class="btn-add" onclick="addFaq()">+ FAQ 추가</button>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
     </div>
 
     <!-- Step 7: 기타 요청사항 -->
@@ -585,8 +655,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()">이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">확인하기</button>
+        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
+        <button type="button" class="btn-next" onclick="goNext()">확인하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
       </div>
     </div>
 
@@ -594,28 +664,28 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <div class="step" data-step="review">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num" style="background:var(--success)">&#10003;</div>
+          <div class="step-num" style="background:linear-gradient(135deg,#22C55E,#16A34A)">&#10003;</div>
           <div class="step-title">작성 내용 확인</div>
         </div>
-        <p class="step-desc">입력한 내용을 확인하고, 수정할 부분이 있으면 "수정" 버튼을 눌러주세요.</p>
+        <p class="step-desc">내용을 확인하고, 수정이 필요하면 "수정"을 눌러주세요.</p>
         <div id="reviewContent"></div>
       </div>
       <div class="submit-area">
-        <button type="button" class="btn-primary" id="btnKakao" style="background:#FEE500;color:#3C1E1E">
-          <svg viewBox="0 0 24 24" fill="#3C1E1E" width="20" height="20"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
+        <button type="button" class="btn-kakao" id="btnKakao">
+          <svg viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
           카카오톡으로 보내기
         </button>
-        <p style="text-align:center;font-size:12px;color:var(--dim);margin:-4px 0 4px">버튼을 누르면 의뢰서가 자동 복사됩니다. 채팅창에 붙여넣기 해주세요.</p>
+        <p class="submit-hint">버튼을 누르면 의뢰서가 자동 복사됩니다.<br>채팅창에 붙여넣기 해주세요.</p>
         <button type="button" class="btn-secondary" id="btnCopy">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           의뢰서만 복사하기
         </button>
-        <button type="button" class="btn-secondary" onclick="goPrev()" style="margin-top:4px">
+        <button type="button" class="btn-secondary" onclick="goPrev()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
           이전 단계로
         </button>
-        <button type="button" id="btnReset" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--dim);font-size:14px;cursor:pointer;transition:all .2s">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 3.2-6.8"/><path d="M3 2v5h5"/></svg>
+        <button type="button" id="btnReset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 3.2-6.8"/><path d="M3 2v5h5"/></svg>
           처음부터 작성하기
         </button>
       </div>
@@ -657,23 +727,24 @@ function goTo(idx) {
   const steps = getSteps();
   if (idx < 0 || idx >= steps.length) return;
 
-  // Deactivate all
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
 
-  // Activate target
   const targetName = steps[idx];
   const targetEl = document.querySelector('[data-step="' + targetName + '"]');
-  if (targetEl) {
-    targetEl.classList.add('active');
-  }
+  if (targetEl) targetEl.classList.add('active');
 
   currentStepIdx = idx;
   updateIndicator();
   updateStepNumbers();
   window.scrollTo({ top: 0, behavior: 'instant' });
 
-  // Build review if going to review step
   if (targetName === 'review') buildReviewHTML();
+
+  // Auto-focus first input on step
+  if (targetEl && targetName !== 'tier' && targetName !== 'review') {
+    const firstInput = targetEl.querySelector('input:not([type="checkbox"]),select,textarea');
+    if (firstInput) setTimeout(() => firstInput.focus(), 400);
+  }
 
   scheduleSave();
 }
@@ -682,7 +753,6 @@ function goNext() {
   const steps = getSteps();
   const currentStepName = steps[currentStepIdx];
 
-  // Validate shop step
   if (currentStepName === 'shop') {
     let valid = true;
     const nameField = document.getElementById('fieldShopName');
@@ -709,6 +779,17 @@ function goPrev() {
   goTo(currentStepIdx - 1);
 }
 
+/* ===== KEYBOARD NAVIGATION ===== */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    const steps = getSteps();
+    if (steps[currentStepIdx] !== 'tier' && steps[currentStepIdx] !== 'review') {
+      e.preventDefault();
+      goNext();
+    }
+  }
+});
+
 /* ===== STEP INDICATOR ===== */
 function updateIndicator() {
   const steps = getSteps();
@@ -721,9 +802,8 @@ function updateIndicator() {
   }
 
   indicator.classList.add('visible');
-  const displayIdx = currentStepIdx + 1;
-  document.getElementById('stepText').textContent = displayIdx + ' / ' + total;
-  const pct = ((currentStepIdx) / (total - 1)) * 100;
+  document.getElementById('stepText').textContent = currentStepIdx + 1 + ' / ' + total;
+  const pct = (currentStepIdx / (total - 1)) * 100;
   document.getElementById('stepFill').style.width = pct + '%';
   document.getElementById('stepLabel').textContent = STEP_LABELS[steps[currentStepIdx]] || '';
 }
@@ -757,7 +837,6 @@ tierCards.forEach(card => {
 
     tierCards.forEach(c => c.classList.toggle('selected', c.dataset.tier === tier));
 
-    // Update design checkboxes visibility
     if (tier === 'light') {
       designLight.classList.remove('hidden');
       designBasic.classList.add('hidden');
@@ -766,10 +845,10 @@ tierCards.forEach(card => {
       designBasic.classList.remove('hidden');
     }
 
-    // Enable next button
     tierNextBtn.style.opacity = '1';
     tierNextBtn.style.pointerEvents = 'auto';
-    tierNextBtn.textContent = (tier === 'light' ? 'Light' : 'Basic') + ' 선택 — 다음';
+    tierNextBtn.textContent = '';
+    tierNextBtn.innerHTML = (tier === 'light' ? 'Light' : 'Basic') + ' 선택 &#8594;';
     tierNextBtn.onclick = () => goTo(1);
 
     scheduleSave();
@@ -808,8 +887,9 @@ function addCategory() {
 function removeCat(btn) {
   const block = btn.closest('.category-block');
   if (document.querySelectorAll('.category-block').length <= 1) return;
-  block.remove();
-  scheduleSave();
+  block.style.opacity = '0';
+  block.style.transform = 'translateY(-8px)';
+  setTimeout(() => { block.remove(); scheduleSave(); }, 200);
 }
 
 /* ===== DYNAMIC ROWS: STAFF ===== */
@@ -857,8 +937,10 @@ function removeRow(btn) {
     row.querySelectorAll('input,textarea').forEach(el => { el.value = ''; });
     return;
   }
-  row.remove();
-  scheduleSave();
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(16px)';
+  row.style.transition = 'all .2s';
+  setTimeout(() => { row.remove(); scheduleSave(); }, 200);
 }
 
 /* ===== LOCALSTORAGE AUTO-SAVE ===== */
@@ -869,15 +951,12 @@ function scheduleSave() {
 
 function saveForm() {
   const data = { tier: currentTier, currentStep: currentStepIdx, fields: {}, checks: [], categories: [] };
-  // Single fields
   document.querySelectorAll('#mainForm input[id][data-save], #mainForm select[id][data-save], #mainForm textarea[id][data-save]').forEach(el => {
     data.fields[el.id] = el.value;
   });
-  // Checkboxes
   document.querySelectorAll('[data-save-check]').forEach(el => {
     if (el.checked) data.checks.push(el.value);
   });
-  // Categories
   document.querySelectorAll('.category-block').forEach(block => {
     const catName = block.querySelector('[data-cat-name]').value;
     const items = [];
@@ -888,32 +967,25 @@ function saveForm() {
     });
     data.categories.push({ name: catName, items: items });
   });
-  // Staff
   data.staff = [];
   document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
     const vals = [];
     row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
     data.staff.push(vals);
   });
-  // Reviews
   data.reviews = [];
   document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
     const vals = [];
     row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
     data.reviews.push(vals);
   });
-  // FAQ
   data.faq = [];
   document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
     const vals = [];
     row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
     data.faq.push(vals);
   });
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    showAutosave();
-  } catch (e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); showAutosave(); } catch (e) {}
 }
 
 function loadForm() {
@@ -922,38 +994,27 @@ function loadForm() {
   if (!raw) return;
   let data;
   try { data = JSON.parse(raw); } catch (e) { return; }
-
-  // Tier
   if (data.tier) {
     currentTier = data.tier;
     tierCards.forEach(c => c.classList.toggle('selected', c.dataset.tier === data.tier));
-    if (data.tier === 'light') {
-      designLight.classList.remove('hidden');
-      designBasic.classList.add('hidden');
-    } else {
-      designLight.classList.add('hidden');
-      designBasic.classList.remove('hidden');
-    }
+    if (data.tier === 'light') { designLight.classList.remove('hidden'); designBasic.classList.add('hidden'); }
+    else { designLight.classList.add('hidden'); designBasic.classList.remove('hidden'); }
     tierNextBtn.style.opacity = '1';
     tierNextBtn.style.pointerEvents = 'auto';
-    tierNextBtn.textContent = (data.tier === 'light' ? 'Light' : 'Basic') + ' 선택 — 다음';
+    tierNextBtn.innerHTML = (data.tier === 'light' ? 'Light' : 'Basic') + ' 선택 &#8594;';
     tierNextBtn.onclick = () => goTo(1);
   }
-
-  // Single fields
   if (data.fields) {
     Object.entries(data.fields).forEach(([id, val]) => {
       const el = document.getElementById(id);
       if (el) el.value = val;
     });
   }
-  // Checkboxes
   if (data.checks) {
     document.querySelectorAll('[data-save-check]').forEach(el => {
       el.checked = data.checks.includes(el.value);
     });
   }
-  // Categories
   if (data.categories && data.categories.length) {
     const container = document.getElementById('categories');
     container.innerHTML = '';
@@ -978,7 +1039,6 @@ function loadForm() {
       );
     });
   }
-  // Staff
   if (data.staff && data.staff.length) {
     const container = document.getElementById('staffRows');
     container.innerHTML = '';
@@ -992,7 +1052,6 @@ function loadForm() {
       );
     });
   }
-  // Reviews
   if (data.reviews && data.reviews.length) {
     const container = document.getElementById('reviewRows');
     container.innerHTML = '';
@@ -1005,7 +1064,6 @@ function loadForm() {
       );
     });
   }
-  // FAQ
   if (data.faq && data.faq.length) {
     const container = document.getElementById('faqRows');
     container.innerHTML = '';
@@ -1018,12 +1076,9 @@ function loadForm() {
       );
     });
   }
-
-  // Restore step position
   if (typeof data.currentStep === 'number' && data.tier) {
     const steps = getSteps();
-    const idx = Math.min(data.currentStep, steps.length - 1);
-    goTo(idx);
+    goTo(Math.min(data.currentStep, steps.length - 1));
   }
 }
 
@@ -1042,8 +1097,6 @@ function buildReviewHTML() {
   const v = id => (document.getElementById(id)?.value || '').trim();
   const container = document.getElementById('reviewContent');
   let html = '';
-
-  // Helper to make a review section
   function sec(title, stepName, bodyHTML) {
     if (!bodyHTML) return '';
     const steps = getSteps();
@@ -1052,36 +1105,24 @@ function buildReviewHTML() {
       + '<div class="review-section-header">'
       + '<span class="review-section-title">' + title + '</span>'
       + (idx >= 0 ? '<button type="button" class="review-edit-btn" onclick="goTo(' + idx + ')">수정</button>' : '')
-      + '</div>'
-      + '<div class="review-section-body">' + bodyHTML + '</div></div>';
+      + '</div><div class="review-section-body">' + bodyHTML + '</div></div>';
   }
-
   function line(label, val) {
     if (!val) return '';
     return '<div class="review-line"><span class="review-label">' + label + '</span>' + esc(val) + '</div>';
   }
-
-  // Tier
   const tierText = currentTier === 'light' ? 'Light (15만원)' : 'Basic (25만원)';
   html += sec('상품', 'tier', '<div class="review-line">' + esc(tierText) + '</div>');
-
-  // Shop info
   let shopBody = '';
   shopBody += line('가게 이름', v('shopName'));
   shopBody += line('업종', v('shopType'));
   shopBody += line('소개', v('shopDesc'));
   shopBody += line('오픈 연도', v('shopYear'));
   html += sec('가게 정보', 'shop', shopBody);
-
-  // Design
   const designGroup = currentTier === 'light' ? '#designLight' : '#designBasic';
   const checked = [];
   document.querySelectorAll(designGroup + ' input:checked').forEach(el => checked.push(el.value));
-  if (checked.length) {
-    html += sec('마음에 드는 디자인', 'design', checked.map(c => '<div class="review-line">' + esc(c) + '</div>').join(''));
-  }
-
-  // Menu
+  if (checked.length) html += sec('마음에 드는 디자인', 'design', checked.map(c => '<div class="review-line">' + esc(c) + '</div>').join(''));
   let menuBody = '';
   document.querySelectorAll('.category-block').forEach(block => {
     const catName = block.querySelector('[data-cat-name]').value.trim();
@@ -1104,8 +1145,6 @@ function buildReviewHTML() {
     }
   });
   if (menuBody) html += sec('메뉴 / 서비스', 'menu', menuBody);
-
-  // Location
   let locBody = '';
   locBody += line('주소', v('address'));
   locBody += line('찾아오는 길', v('directions'));
@@ -1113,24 +1152,15 @@ function buildReviewHTML() {
   locBody += line('휴무일', v('closedDay'));
   locBody += line('참고', v('locNote'));
   if (locBody) html += sec('위치 & 영업시간', 'location', locBody);
-
-  // Contact
   let contactBody = '';
   contactBody += line('전화', v('phone'));
   contactBody += line('카카오톡', v('kakao'));
   contactBody += line('인스타그램', v('instagram'));
   if (contactBody) html += sec('연락처', 'contact', contactBody);
-
-  // Photo
   const photos = [];
   document.querySelectorAll('#photoChecklist input:checked').forEach(el => photos.push(el.value));
-  if (photos.length) {
-    html += sec('사진 준비', 'photo', photos.map(p => '<div class="review-line">' + esc(p) + '</div>').join(''));
-  }
-
-  // Basic-only sections
+  if (photos.length) html += sec('사진 준비', 'photo', photos.map(p => '<div class="review-line">' + esc(p) + '</div>').join(''));
   if (currentTier === 'basic') {
-    // Staff
     let staffBody = '';
     document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
@@ -1145,8 +1175,6 @@ function buildReviewHTML() {
       }
     });
     if (staffBody) html += sec('스태프 소개', 'staff', staffBody);
-
-    // Reviews
     let revBody = '';
     document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
@@ -1155,8 +1183,6 @@ function buildReviewHTML() {
       if (who || text) revBody += '<div class="review-line">' + esc(who ? who + ': ' : '') + esc(text) + '</div>';
     });
     if (revBody) html += sec('고객 후기', 'reviews', revBody);
-
-    // FAQ
     let faqBody = '';
     document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
@@ -1169,12 +1195,7 @@ function buildReviewHTML() {
     });
     if (faqBody) html += sec('FAQ', 'faq', faqBody);
   }
-
-  // Extra
-  if (v('extra')) {
-    html += sec('기타 요청사항', 'extra', '<div class="review-line">' + esc(v('extra')) + '</div>');
-  }
-
+  if (v('extra')) html += sec('기타 요청사항', 'extra', '<div class="review-line">' + esc(v('extra')) + '</div>');
   container.innerHTML = html;
 }
 
@@ -1183,23 +1204,18 @@ function buildText() {
   const v = id => (document.getElementById(id)?.value || '').trim();
   const tier = currentTier === 'light' ? 'Light (15만원)' : 'Basic (25만원)';
   let lines = [];
-
   lines.push('========================================');
   lines.push('  동보웹 웹사이트 제작 의뢰서');
   lines.push('========================================');
   lines.push('');
   lines.push('상품: ' + tier);
   lines.push('');
-
-  // 1. 가게 정보
   lines.push('── 가게 정보 ──');
   if (v('shopName')) lines.push('이름: ' + v('shopName'));
   if (v('shopType')) lines.push('업종: ' + v('shopType'));
   if (v('shopDesc')) lines.push('소개: ' + v('shopDesc'));
   if (v('shopYear')) lines.push('오픈: ' + v('shopYear'));
   lines.push('');
-
-  // 2. 디자인
   const designGroup = currentTier === 'light' ? '#designLight' : '#designBasic';
   const checked = [];
   document.querySelectorAll(designGroup + ' input:checked').forEach(el => checked.push(el.value));
@@ -1208,8 +1224,6 @@ function buildText() {
     checked.forEach(c => lines.push('• ' + c));
     lines.push('');
   }
-
-  // 3. 메뉴
   const cats = document.querySelectorAll('.category-block');
   let hasMenu = false;
   const menuLines = [];
@@ -1222,10 +1236,10 @@ function buildText() {
       const price = inputs[1]?.value.trim() || '';
       const desc = inputs[2]?.value.trim() || '';
       if (name) {
-        let line = '  • ' + name;
-        if (price) line += ' — ' + price;
-        if (desc) line += ' (' + desc + ')';
-        items.push(line);
+        let l = '  • ' + name;
+        if (price) l += ' — ' + price;
+        if (desc) l += ' (' + desc + ')';
+        items.push(l);
       }
     });
     if (catName || items.length) {
@@ -1234,112 +1248,45 @@ function buildText() {
       items.forEach(i => menuLines.push(i));
     }
   });
-  if (hasMenu) {
-    lines.push('── 메뉴 / 서비스 ──');
-    menuLines.forEach(l => lines.push(l));
-    lines.push('');
-  }
-
-  // 4. 위치
-  const locFields = [
-    ['주소', v('address')], ['찾아오는 길', v('directions')],
-    ['영업시간', v('hours')], ['휴무일', v('closedDay')], ['참고', v('locNote')]
-  ].filter(f => f[1]);
-  if (locFields.length) {
-    lines.push('── 위치 & 영업시간 ──');
-    locFields.forEach(f => lines.push(f[0] + ': ' + f[1]));
-    lines.push('');
-  }
-
-  // 5. 연락처
-  const contacts = [
-    ['전화', v('phone')], ['카카오톡', v('kakao')], ['인스타그램', v('instagram')]
-  ].filter(f => f[1]);
-  if (contacts.length) {
-    lines.push('── 연락처 ──');
-    contacts.forEach(f => lines.push(f[0] + ': ' + f[1]));
-    lines.push('');
-  }
-
-  // 6. 사진
+  if (hasMenu) { lines.push('── 메뉴 / 서비스 ──'); menuLines.forEach(l => lines.push(l)); lines.push(''); }
+  const locFields = [['주소',v('address')],['찾아오는 길',v('directions')],['영업시간',v('hours')],['휴무일',v('closedDay')],['참고',v('locNote')]].filter(f=>f[1]);
+  if (locFields.length) { lines.push('── 위치 & 영업시간 ──'); locFields.forEach(f=>lines.push(f[0]+': '+f[1])); lines.push(''); }
+  const contacts = [['전화',v('phone')],['카카오톡',v('kakao')],['인스타그램',v('instagram')]].filter(f=>f[1]);
+  if (contacts.length) { lines.push('── 연락처 ──'); contacts.forEach(f=>lines.push(f[0]+': '+f[1])); lines.push(''); }
   const photos = [];
   document.querySelectorAll('#photoChecklist input:checked').forEach(el => photos.push(el.value));
-  if (photos.length) {
-    lines.push('── 사진 준비 ──');
-    photos.forEach(p => lines.push('✓ ' + p));
-    lines.push('');
-  }
-
-  // Basic 전용
+  if (photos.length) { lines.push('── 사진 준비 ──'); photos.forEach(p=>lines.push('✓ '+p)); lines.push(''); }
   if (currentTier === 'basic') {
-    // 스태프
     const staffItems = [];
     document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const name = inputs[0]?.value.trim() || '';
-      const role = inputs[1]?.value.trim() || '';
-      const desc = inputs[2]?.value.trim() || '';
-      if (name) {
-        let line = '• ' + name;
-        if (role) line += ' (' + role + ')';
-        if (desc) line += ' — ' + desc;
-        staffItems.push(line);
-      }
+      const name = inputs[0]?.value.trim()||''; const role = inputs[1]?.value.trim()||''; const desc = inputs[2]?.value.trim()||'';
+      if (name) { let l='• '+name; if(role) l+=' ('+role+')'; if(desc) l+=' — '+desc; staffItems.push(l); }
     });
-    if (staffItems.length) {
-      lines.push('── 스태프 소개 ──');
-      staffItems.forEach(s => lines.push(s));
-      lines.push('');
-    }
-
-    // 후기
+    if (staffItems.length) { lines.push('── 스태프 소개 ──'); staffItems.forEach(s=>lines.push(s)); lines.push(''); }
     const reviewItems = [];
     document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const who = inputs[0]?.value.trim() || '';
-      const text = inputs[1]?.value.trim() || '';
-      if (who || text) reviewItems.push('• ' + (who ? who + ': ' : '') + text);
+      const who = inputs[0]?.value.trim()||''; const text = inputs[1]?.value.trim()||'';
+      if (who||text) reviewItems.push('• '+(who?who+': ':'')+text);
     });
-    if (reviewItems.length) {
-      lines.push('── 고객 후기 ──');
-      reviewItems.forEach(r => lines.push(r));
-      lines.push('');
-    }
-
-    // FAQ
+    if (reviewItems.length) { lines.push('── 고객 후기 ──'); reviewItems.forEach(r=>lines.push(r)); lines.push(''); }
     const faqItems = [];
     document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
       const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const q = inputs[0]?.value.trim() || '';
-      const a = inputs[1]?.value.trim() || '';
-      if (q) {
-        faqItems.push('Q. ' + q);
-        if (a) faqItems.push('A. ' + a);
-        faqItems.push('');
-      }
+      const q = inputs[0]?.value.trim()||''; const a = inputs[1]?.value.trim()||'';
+      if (q) { faqItems.push('Q. '+q); if(a) faqItems.push('A. '+a); faqItems.push(''); }
     });
-    if (faqItems.length) {
-      lines.push('── FAQ ──');
-      faqItems.forEach(f => lines.push(f));
-    }
+    if (faqItems.length) { lines.push('── FAQ ──'); faqItems.forEach(f=>lines.push(f)); }
   }
-
-  // 7. 기타
-  if (v('extra')) {
-    lines.push('── 기타 요청사항 ──');
-    lines.push(v('extra'));
-    lines.push('');
-  }
-
+  if (v('extra')) { lines.push('── 기타 요청사항 ──'); lines.push(v('extra')); lines.push(''); }
   lines.push('========================================');
   return lines.join('\n');
 }
 
-document.getElementById('btnCopy').addEventListener('click', () => {
+function copyText() {
   const text = buildText();
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('의뢰서가 복사되었습니다!');
-  }).catch(() => {
+  return navigator.clipboard.writeText(text).catch(() => {
     const ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;left:-9999px';
@@ -1347,33 +1294,24 @@ document.getElementById('btnCopy').addEventListener('click', () => {
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    showToast('의뢰서가 복사되었습니다!');
   });
+}
+
+document.getElementById('btnCopy').addEventListener('click', () => {
+  copyText().then(() => showToast('의뢰서가 복사되었습니다!'));
 });
 
-/* ===== KAKAO LINK ===== */
 document.getElementById('btnKakao').addEventListener('click', () => {
-  const text = buildText();
-  navigator.clipboard.writeText(text).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;left:-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  });
+  copyText();
   window.open('https://pf.kakao.com/_zAqqX/chat', '_blank', 'noopener,noreferrer');
 });
 
-/* ===== RESET ===== */
 document.getElementById('btnReset').addEventListener('click', () => {
   if (!confirm('작성한 내용이 모두 삭제됩니다. 처음부터 다시 작성하시겠습니까?')) return;
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   location.reload();
 });
 
-/* ===== TOAST ===== */
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -1381,14 +1319,29 @@ function showToast(msg) {
   setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-/* ===== INPUT LISTENERS ===== */
 document.getElementById('mainForm').addEventListener('input', function(e) {
   scheduleSave();
-  // Clear field errors on input
   const field = e.target.closest('.field');
   if (field) field.classList.remove('has-error');
 });
 document.getElementById('mainForm').addEventListener('change', scheduleSave);
+
+/* ===== TOUCH SWIPE (mobile) ===== */
+let touchStartX = 0;
+let touchStartY = 0;
+document.addEventListener('touchstart', function(e) {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', function(e) {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx)) return;
+  const steps = getSteps();
+  if (steps[currentStepIdx] === 'review' || steps[currentStepIdx] === 'tier') return;
+  if (dx > 0) goPrev();
+  else goNext();
+}, { passive: true });
 
 /* ===== INIT ===== */
 loadForm();
