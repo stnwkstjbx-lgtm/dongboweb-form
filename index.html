@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>동보웹 — 웹사이트 제작 의뢰서</title>
+<meta name="description" content="소상공인 맞춤 프리미엄 웹사이트 제작 의뢰서. 간편하게 작성하고 카카오톡으로 보내주세요.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233B5998'/><text x='16' y='22' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700' font-size='18'>D</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter','Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;
+  word-break:keep-all;overflow-wrap:break-word;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+input,select,textarea,button{font:inherit;color:inherit}
+
+/* ===== CSS VARIABLES ===== */
+:root{
+  --bg:#FAFAFA;--surface:#FFFFFF;--fg:#0A0A0A;--fg2:#2A2A2A;--fg3:#555;
+  --dim:#888;--dim2:#AAA;--dim3:#CCC;--border:#E2E2E2;--border2:#EEE;
+  --accent:#3B5998;--accent-light:#EBF0FA;--accent-dark:#2D4373;
+  --success:#22C55E;--success-bg:#F0FDF4;
+  --error:#EF4444;--error-bg:#FEF2F2;
+  --radius:12px;--radius-lg:20px;
+  --font-sans:'Inter','Noto Sans KR',sans-serif;
+  --font-mono:'DM Mono','Noto Sans KR',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08),0 4px 10px rgba(0,0,0,.04);
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:1000;
+  transition:width .3s var(--ease);will-change:width}
+
+/* ===== LAYOUT ===== */
+.container{max-width:640px;margin:0 auto;padding:24px 20px 60px}
+
+/* ===== HEADER ===== */
+.header{text-align:center;margin-bottom:40px;padding-top:20px}
+.header-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px}
+.header-logo svg{width:36px;height:36px}
+.header-logo span{font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--fg)}
+.header h1{font-size:24px;font-weight:700;letter-spacing:-.03em;margin-bottom:8px;color:var(--fg)}
+.header p{font-size:14px;color:var(--dim);line-height:1.7}
+
+/* ===== TIER TOGGLE ===== */
+.tier-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:36px;box-shadow:var(--shadow)}
+.tier-btn{flex:1;padding:14px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;
+  border:none;background:transparent;transition:all .25s var(--ease);position:relative}
+.tier-btn.active{background:var(--accent);color:#fff}
+.tier-btn:not(.active):hover{background:var(--accent-light)}
+.tier-label{display:block;margin-bottom:2px}
+.tier-price{font-size:12px;font-weight:400;opacity:.7}
+
+/* ===== SECTION ===== */
+.form-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:28px 24px;margin-bottom:20px;box-shadow:var(--shadow);transition:opacity .3s,transform .3s}
+.form-section.hidden{display:none}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.section-title{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.section-desc{font-size:13px;color:var(--dim);margin-bottom:20px;padding-left:40px}
+
+/* ===== FORM FIELDS ===== */
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field-label{display:block;font-size:13px;font-weight:600;color:var(--fg2);margin-bottom:6px}
+.field-label .req{color:var(--error);margin-left:2px}
+.field-hint{font-size:12px;color:var(--dim);margin-top:4px}
+
+input[type="text"],input[type="tel"],input[type="url"],select,textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);font-size:15px;transition:border-color .2s,box-shadow .2s;outline:none;
+  -webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(59,89,152,.12)}
+textarea{resize:vertical;min-height:80px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+
+/* ===== CHECKBOX GROUP ===== */
+.check-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.check-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border);
+  border-radius:var(--radius);cursor:pointer;transition:all .2s;font-size:14px;user-select:none}
+.check-item:hover{border-color:var(--accent);background:var(--accent-light)}
+.check-item input{display:none}
+.check-item .check-box{width:18px;height:18px;border:2px solid var(--dim3);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.check-item input:checked ~ .check-box{background:var(--accent);border-color:var(--accent)}
+.check-item input:checked ~ .check-box::after{content:'';display:block;width:5px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check-item input:checked ~ .check-text{color:var(--accent);font-weight:500}
+
+/* ===== DYNAMIC ROWS ===== */
+.dynamic-rows{display:flex;flex-direction:column;gap:12px}
+.dynamic-row{background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);
+  padding:16px;position:relative}
+.dynamic-row .row-fields{display:flex;flex-direction:column;gap:10px}
+.dynamic-row input,.dynamic-row textarea{background:var(--surface)}
+.row-inline{display:flex;gap:10px}
+.row-inline input{flex:1}
+.btn-remove{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;
+  align-items:center;justify-content:center;color:var(--dim);transition:all .2s;font-size:16px}
+.btn-remove:hover{background:var(--error-bg);border-color:var(--error);color:var(--error)}
+
+.btn-add{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;
+  border:1px dashed var(--dim3);border-radius:var(--radius);background:transparent;cursor:pointer;
+  color:var(--dim);font-size:14px;font-weight:500;transition:all .2s}
+.btn-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+
+/* ===== CATEGORY BLOCK ===== */
+.category-block{margin-bottom:16px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.category-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg);
+  border-bottom:1px solid var(--border2)}
+.category-header input{flex:1;border:none;background:transparent;font-weight:600;font-size:14px;padding:0}
+.category-header input:focus{outline:none}
+.category-header .btn-remove{position:static;width:24px;height:24px}
+.category-items{padding:12px}
+.category-items .dynamic-rows{gap:10px}
+.category-items .dynamic-row{padding:12px}
+
+/* ===== PHOTO GUIDE ===== */
+.photo-guide{background:var(--accent-light);border:1px solid rgba(59,89,152,.15);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:16px}
+.photo-guide p{font-size:14px;color:var(--accent-dark);font-weight:500;margin-bottom:8px}
+.photo-guide .guide-sub{font-size:13px;color:var(--dim);font-weight:400}
+.photo-checklist{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.photo-checklist label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg2);cursor:pointer}
+.photo-checklist input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent)}
+
+/* ===== SUBMIT AREA ===== */
+.submit-area{margin-top:32px;display:flex;flex-direction:column;gap:12px}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
+  border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px;
+  font-weight:600;cursor:pointer;transition:all .25s var(--ease);box-shadow:var(--shadow)}
+.btn-primary:hover{background:var(--accent-dark);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
+  border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--fg);
+  font-size:15px;font-weight:600;cursor:pointer;transition:all .25s var(--ease);box-shadow:var(--shadow)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.btn-secondary:active{transform:translateY(0)}
+.btn-secondary svg{width:20px;height:20px}
+
+.btn-reset{display:block;margin:16px auto 0;padding:8px 16px;border:none;background:transparent;
+  color:var(--dim);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.btn-reset:hover{color:var(--error)}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--fg);color:#fff;padding:14px 24px;border-radius:var(--radius);font-size:14px;
+  font-weight:500;z-index:1001;transition:transform .4s var(--ease);white-space:nowrap;
+  box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none}
+
+/* ===== AUTOSAVE INDICATOR ===== */
+.autosave{position:fixed;bottom:20px;right:20px;font-size:12px;color:var(--dim2);
+  font-family:var(--font-mono);opacity:0;transition:opacity .3s}
+.autosave.show{opacity:1}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .container{padding:16px 14px 48px}
+  .form-section{padding:20px 16px}
+  .check-group{grid-template-columns:1fr}
+  .row-inline{flex-direction:column;gap:8px}
+  .header h1{font-size:20px}
+  .section-desc{padding-left:0}
+}
+@media(min-width:481px) and (max-width:768px){
+  .container{padding:20px 16px 56px}
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Autosave Indicator -->
+<div class="autosave" id="autosave">자동 저장됨</div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="10" fill="#3B5998"/>
+        <text x="18" y="25" text-anchor="middle" fill="white" font-family="Inter,sans-serif" font-weight="700" font-size="20">D</text>
+      </svg>
+      <span>동보웹</span>
+    </div>
+    <h1>웹사이트 제작 의뢰서</h1>
+    <p>아래 폼을 작성해주시면<br>맞춤 웹사이트를 제작해드립니다.</p>
+  </header>
+
+  <!-- Tier Toggle -->
+  <div class="tier-toggle" id="tierToggle">
+    <button type="button" class="tier-btn active" data-tier="light">
+      <span class="tier-label">Light</span>
+      <span class="tier-price">15만원</span>
+    </button>
+    <button type="button" class="tier-btn" data-tier="basic">
+      <span class="tier-label">Basic</span>
+      <span class="tier-price">25만원</span>
+    </button>
+  </div>
+
+  <form id="mainForm" novalidate>
+
+    <!-- 1. 가게 정보 -->
+    <section class="form-section" data-section="1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">가게 정보</div>
+      </div>
+      <div class="field">
+        <label class="field-label">가게 이름 <span class="req">*</span></label>
+        <input type="text" id="shopName" placeholder="예: 밀도 베이커리" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">업종 <span class="req">*</span></label>
+        <select id="shopType" data-save>
+          <option value="">선택해주세요</option>
+          <option value="카페">카페</option>
+          <option value="베이커리">베이커리</option>
+          <option value="레스토랑">레스토랑</option>
+          <option value="바/펍">바/펍</option>
+          <option value="헤어살롱">헤어살롱</option>
+          <option value="네일살롱">네일살롱</option>
+          <option value="피부관리">피부관리</option>
+          <option value="필라테스/요가">필라테스/요가</option>
+          <option value="PT/피트니스">PT/피트니스</option>
+          <option value="학원/교육">학원/교육</option>
+          <option value="인테리어">인테리어</option>
+          <option value="꽃집">꽃집</option>
+          <option value="의류/편집샵">의류/편집샵</option>
+          <option value="사진스튜디오">사진스튜디오</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label">가게 소개</label>
+        <textarea id="shopDesc" rows="3" placeholder="가게의 분위기, 특징, 콘셉트 등을 자유롭게 적어주세요." data-save></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">오픈 연도</label>
+        <input type="text" id="shopYear" placeholder="예: 2023" data-save>
+      </div>
+    </section>
+
+    <!-- 2. 마음에 드는 디자인 -->
+    <section class="form-section" data-section="2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">마음에 드는 디자인</div>
+      </div>
+      <p class="section-desc">참고하고 싶은 디자인을 골라주세요. (복수 선택 가능)</p>
+      <!-- Light templates -->
+      <div class="check-group" id="designLight">
+        <label class="check-item"><input type="checkbox" value="밀도 (베이커리)" data-save-check><span class="check-box"></span><span class="check-text">밀도</span></label>
+        <label class="check-item"><input type="checkbox" value="라루즈 (와인바)" data-save-check><span class="check-box"></span><span class="check-text">라루즈</span></label>
+        <label class="check-item"><input type="checkbox" value="소요 (필라테스)" data-save-check><span class="check-box"></span><span class="check-text">소요</span></label>
+        <label class="check-item"><input type="checkbox" value="뤼느 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">뤼느</span></label>
+        <label class="check-item"><input type="checkbox" value="프라임 (수학학원)" data-save-check><span class="check-box"></span><span class="check-text">프라임</span></label>
+      </div>
+      <!-- Basic templates -->
+      <div class="check-group hidden" id="designBasic">
+        <label class="check-item"><input type="checkbox" value="느와르 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">느와르</span></label>
+        <label class="check-item"><input type="checkbox" value="블랑 (네일살롱)" data-save-check><span class="check-box"></span><span class="check-text">블랑</span></label>
+        <label class="check-item"><input type="checkbox" value="아뜰리에 (인테리어)" data-save-check><span class="check-box"></span><span class="check-text">아뜰리에</span></label>
+        <label class="check-item"><input type="checkbox" value="아우라 (요가)" data-save-check><span class="check-box"></span><span class="check-text">아우라</span></label>
+        <label class="check-item"><input type="checkbox" value="포지 (PT)" data-save-check><span class="check-box"></span><span class="check-text">포지</span></label>
+      </div>
+    </section>
+
+    <!-- 3. 메뉴/서비스 -->
+    <section class="form-section" data-section="3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">메뉴 / 서비스</div>
+      </div>
+      <p class="section-desc">카테고리별로 메뉴나 서비스를 정리해주세요.</p>
+      <div id="categories">
+        <div class="category-block" data-cat="0">
+          <div class="category-header">
+            <input type="text" placeholder="카테고리명 (예: 음료, 커트, 수업 등)" data-save data-cat-name="0">
+            <button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button>
+          </div>
+          <div class="category-items">
+            <div class="dynamic-rows" data-cat-rows="0">
+              <div class="dynamic-row">
+                <div class="row-fields">
+                  <div class="row-inline">
+                    <input type="text" placeholder="메뉴/서비스명" data-save>
+                    <input type="text" placeholder="가격" data-save style="max-width:120px">
+                  </div>
+                  <input type="text" placeholder="설명 (선택)" data-save>
+                </div>
+                <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+              </div>
+            </div>
+            <button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="addCategory()" style="margin-top:8px">+ 카테고리 추가</button>
+    </section>
+
+    <!-- 4. 위치 & 영업시간 -->
+    <section class="form-section" data-section="4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">위치 &amp; 영업시간</div>
+      </div>
+      <div class="field">
+        <label class="field-label">주소</label>
+        <input type="text" id="address" placeholder="예: 서울시 강남구 역삼동 123-45" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">찾아오는 길</label>
+        <input type="text" id="directions" placeholder="예: 2호선 강남역 3번 출구 도보 5분" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">영업시간</label>
+        <input type="text" id="hours" placeholder="예: 매일 10:00 - 22:00" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">휴무일</label>
+        <input type="text" id="closedDay" placeholder="예: 매주 월요일" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">참고 사항</label>
+        <input type="text" id="locNote" placeholder="예: 주차 가능, 예약 필수 등" data-save>
+      </div>
+    </section>
+
+    <!-- 5. 연락처 -->
+    <section class="form-section" data-section="5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">연락처</div>
+      </div>
+      <div class="field">
+        <label class="field-label">전화번호</label>
+        <input type="tel" id="phone" placeholder="예: 02-1234-5678" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">카카오톡 채널</label>
+        <input type="text" id="kakao" placeholder="예: @가게이름" data-save>
+      </div>
+      <div class="field">
+        <label class="field-label">인스타그램</label>
+        <input type="text" id="instagram" placeholder="예: @가게인스타" data-save>
+      </div>
+    </section>
+
+    <!-- 6. 사진 안내 -->
+    <section class="form-section" data-section="6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-title">사진</div>
+      </div>
+      <div class="photo-guide">
+        <p>사진은 카카오톡으로 보내주세요.</p>
+        <span class="guide-sub">아래 체크리스트를 참고해서 준비해주시면 됩니다.</span>
+      </div>
+      <div class="photo-checklist" id="photoChecklist">
+        <label><input type="checkbox" data-save-check value="매장 외관"> 매장 외관</label>
+        <label><input type="checkbox" data-save-check value="매장 내부"> 매장 내부</label>
+        <label><input type="checkbox" data-save-check value="대표 메뉴/서비스"> 대표 메뉴 / 서비스</label>
+        <label><input type="checkbox" data-save-check value="로고"> 로고 (있는 경우)</label>
+        <label><input type="checkbox" data-save-check value="프로필/스태프"> 프로필 / 스태프 사진</label>
+        <label><input type="checkbox" data-save-check value="기타"> 기타 (분위기 사진 등)</label>
+      </div>
+    </section>
+
+    <!-- Basic 전용: 스태프 소개 -->
+    <section class="form-section basic-only hidden" data-section="B1">
+      <div class="section-header">
+        <div class="section-num">+</div>
+        <div class="section-title">스태프 소개</div>
+      </div>
+      <p class="section-desc">팀원 정보를 입력해주세요.</p>
+      <div class="dynamic-rows" id="staffRows">
+        <div class="dynamic-row">
+          <div class="row-fields">
+            <div class="row-inline">
+              <input type="text" placeholder="이름" data-save>
+              <input type="text" placeholder="직책" data-save>
+            </div>
+            <input type="text" placeholder="소개 (선택)" data-save>
+          </div>
+          <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="addStaff()">+ 스태프 추가</button>
+    </section>
+
+    <!-- Basic 전용: 고객 후기 -->
+    <section class="form-section basic-only hidden" data-section="B2">
+      <div class="section-header">
+        <div class="section-num">+</div>
+        <div class="section-title">고객 후기</div>
+      </div>
+      <p class="section-desc">웹사이트에 넣고 싶은 후기를 적어주세요.</p>
+      <div class="dynamic-rows" id="reviewRows">
+        <div class="dynamic-row">
+          <div class="row-fields">
+            <input type="text" placeholder="고객명 (예: 김OO)" data-save>
+            <textarea rows="2" placeholder="후기 내용" data-save></textarea>
+          </div>
+          <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="addReview()">+ 후기 추가</button>
+    </section>
+
+    <!-- Basic 전용: FAQ -->
+    <section class="form-section basic-only hidden" data-section="B3">
+      <div class="section-header">
+        <div class="section-num">+</div>
+        <div class="section-title">자주 묻는 질문 (FAQ)</div>
+      </div>
+      <p class="section-desc">고객이 자주 묻는 질문과 답변을 적어주세요.</p>
+      <div class="dynamic-rows" id="faqRows">
+        <div class="dynamic-row">
+          <div class="row-fields">
+            <input type="text" placeholder="질문" data-save>
+            <textarea rows="2" placeholder="답변" data-save></textarea>
+          </div>
+          <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="addFaq()">+ FAQ 추가</button>
+    </section>
+
+    <!-- 7. 기타 -->
+    <section class="form-section" data-section="7">
+      <div class="section-header">
+        <div class="section-num" id="etcNum">7</div>
+        <div class="section-title">기타 요청사항</div>
+      </div>
+      <div class="field">
+        <textarea id="extra" rows="4" placeholder="추가로 넣고 싶은 내용이나 참고사항이 있다면 자유롭게 적어주세요." data-save></textarea>
+      </div>
+    </section>
+
+  </form>
+
+  <!-- Submit Area -->
+  <div class="submit-area">
+    <button type="button" class="btn-primary" id="btnCopy">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      의뢰서 복사하기
+    </button>
+    <button type="button" class="btn-secondary" id="btnKakao">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
+      카카오톡으로 보내기
+    </button>
+    <button type="button" class="btn-reset" id="btnReset">초기화</button>
+  </div>
+
+  <footer class="footer">
+    <a href="https://dongboweb.vercel.app" target="_blank" rel="noopener noreferrer">dongboweb.vercel.app</a>
+  </footer>
+
+</div>
+
+<script>
+/* ===== STATE ===== */
+let currentTier = 'light';
+let catCounter = 1;
+const STORAGE_KEY = 'dongboweb-form';
+let saveTimer = null;
+
+/* ===== TIER TOGGLE ===== */
+const tierBtns = document.querySelectorAll('.tier-btn');
+const designLight = document.getElementById('designLight');
+const designBasic = document.getElementById('designBasic');
+const basicSections = document.querySelectorAll('.basic-only');
+
+function setTier(tier) {
+  currentTier = tier;
+  tierBtns.forEach(b => b.classList.toggle('active', b.dataset.tier === tier));
+  if (tier === 'light') {
+    designLight.classList.remove('hidden');
+    designBasic.classList.add('hidden');
+    basicSections.forEach(s => s.classList.add('hidden'));
+  } else {
+    designLight.classList.add('hidden');
+    designBasic.classList.remove('hidden');
+    basicSections.forEach(s => s.classList.remove('hidden'));
+  }
+  updateSectionNumbers();
+  scheduleSave();
+}
+
+tierBtns.forEach(b => b.addEventListener('click', () => setTier(b.dataset.tier)));
+
+function updateSectionNumbers() {
+  const visible = document.querySelectorAll('.form-section:not(.hidden)');
+  visible.forEach((sec, i) => {
+    const num = sec.querySelector('.section-num');
+    if (num) num.textContent = i + 1;
+  });
+}
+
+/* ===== DYNAMIC ROWS: MENU ===== */
+function menuRowHTML() {
+  return '<div class="dynamic-row"><div class="row-fields">'
+    + '<div class="row-inline"><input type="text" placeholder="메뉴/서비스명" data-save>'
+    + '<input type="text" placeholder="가격" data-save style="max-width:120px"></div>'
+    + '<input type="text" placeholder="설명 (선택)" data-save>'
+    + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
+}
+
+function addMenuItem(btn) {
+  const rows = btn.previousElementSibling;
+  rows.insertAdjacentHTML('beforeend', menuRowHTML());
+  const newInputs = rows.lastElementChild.querySelectorAll('input');
+  newInputs[0].focus();
+  scheduleSave();
+}
+
+function addCategory() {
+  const idx = catCounter++;
+  const html = '<div class="category-block" data-cat="' + idx + '">'
+    + '<div class="category-header"><input type="text" placeholder="카테고리명 (예: 음료, 커트, 수업 등)" data-save data-cat-name="' + idx + '">'
+    + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button></div>'
+    + '<div class="category-items"><div class="dynamic-rows" data-cat-rows="' + idx + '">'
+    + menuRowHTML()
+    + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button></div></div>';
+  document.getElementById('categories').insertAdjacentHTML('beforeend', html);
+  const newBlock = document.querySelector('[data-cat="' + idx + '"]');
+  newBlock.querySelector('[data-cat-name]').focus();
+  scheduleSave();
+}
+
+function removeCat(btn) {
+  const block = btn.closest('.category-block');
+  const allBlocks = document.querySelectorAll('.category-block');
+  if (allBlocks.length <= 1) return;
+  block.remove();
+  scheduleSave();
+}
+
+/* ===== DYNAMIC ROWS: STAFF ===== */
+function addStaff() {
+  const html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<div class="row-inline"><input type="text" placeholder="이름" data-save>'
+    + '<input type="text" placeholder="직책" data-save></div>'
+    + '<input type="text" placeholder="소개 (선택)" data-save>'
+    + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
+  document.getElementById('staffRows').insertAdjacentHTML('beforeend', html);
+  const rows = document.getElementById('staffRows');
+  rows.lastElementChild.querySelector('input').focus();
+  scheduleSave();
+}
+
+/* ===== DYNAMIC ROWS: REVIEWS ===== */
+function addReview() {
+  const html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<input type="text" placeholder="고객명 (예: 김OO)" data-save>'
+    + '<textarea rows="2" placeholder="후기 내용" data-save></textarea>'
+    + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
+  document.getElementById('reviewRows').insertAdjacentHTML('beforeend', html);
+  const rows = document.getElementById('reviewRows');
+  rows.lastElementChild.querySelector('input').focus();
+  scheduleSave();
+}
+
+/* ===== DYNAMIC ROWS: FAQ ===== */
+function addFaq() {
+  const html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<input type="text" placeholder="질문" data-save>'
+    + '<textarea rows="2" placeholder="답변" data-save></textarea>'
+    + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
+  document.getElementById('faqRows').insertAdjacentHTML('beforeend', html);
+  const rows = document.getElementById('faqRows');
+  rows.lastElementChild.querySelector('input').focus();
+  scheduleSave();
+}
+
+/* ===== REMOVE ROW ===== */
+function removeRow(btn) {
+  const row = btn.closest('.dynamic-row');
+  const container = row.parentElement;
+  if (container.children.length <= 1) {
+    row.querySelectorAll('input,textarea').forEach(el => { el.value = ''; });
+    return;
+  }
+  row.remove();
+  scheduleSave();
+}
+
+/* ===== PROGRESS BAR ===== */
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, { passive: true });
+window.addEventListener('resize', updateProgress, { passive: true });
+
+/* ===== LOCALSTORAGE AUTO-SAVE ===== */
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveForm, 500);
+}
+
+function saveForm() {
+  const data = { tier: currentTier, fields: {}, checks: [], categories: [] };
+  // Single fields
+  document.querySelectorAll('#mainForm input[id][data-save], #mainForm select[id][data-save], #mainForm textarea[id][data-save]').forEach(el => {
+    data.fields[el.id] = el.value;
+  });
+  // Checkboxes
+  document.querySelectorAll('[data-save-check]').forEach(el => {
+    if (el.checked) data.checks.push(el.value);
+  });
+  // Categories
+  document.querySelectorAll('.category-block').forEach(block => {
+    const catName = block.querySelector('[data-cat-name]').value;
+    const items = [];
+    block.querySelectorAll('.dynamic-row').forEach(row => {
+      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      const vals = [];
+      inputs.forEach(inp => vals.push(inp.value));
+      items.push(vals);
+    });
+    data.categories.push({ name: catName, items: items });
+  });
+  // Staff
+  data.staff = [];
+  document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
+    const vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+    data.staff.push(vals);
+  });
+  // Reviews
+  data.reviews = [];
+  document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
+    const vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+    data.reviews.push(vals);
+  });
+  // FAQ
+  data.faq = [];
+  document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
+    const vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+    data.faq.push(vals);
+  });
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showAutosave();
+  } catch (e) { /* quota exceeded — ignore */ }
+}
+
+function loadForm() {
+  let raw;
+  try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
+  if (!raw) return;
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+
+  // Tier
+  if (data.tier) setTier(data.tier);
+  // Single fields
+  if (data.fields) {
+    Object.entries(data.fields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+  }
+  // Checkboxes
+  if (data.checks) {
+    document.querySelectorAll('[data-save-check]').forEach(el => {
+      el.checked = data.checks.includes(el.value);
+    });
+  }
+  // Categories
+  if (data.categories && data.categories.length) {
+    const container = document.getElementById('categories');
+    // Remove existing
+    container.innerHTML = '';
+    data.categories.forEach((cat, ci) => {
+      const idx = ci === 0 ? 0 : catCounter++;
+      let rowsHTML = '';
+      cat.items.forEach(item => {
+        rowsHTML += '<div class="dynamic-row"><div class="row-fields">'
+          + '<div class="row-inline"><input type="text" placeholder="메뉴/서비스명" data-save value="' + esc(item[0] || '') + '">'
+          + '<input type="text" placeholder="가격" data-save style="max-width:120px" value="' + esc(item[1] || '') + '"></div>'
+          + '<input type="text" placeholder="설명 (선택)" data-save value="' + esc(item[2] || '') + '">'
+          + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
+      });
+      if (!cat.items.length) rowsHTML = menuRowHTML();
+      container.insertAdjacentHTML('beforeend',
+        '<div class="category-block" data-cat="' + idx + '">'
+        + '<div class="category-header"><input type="text" placeholder="카테고리명" data-save data-cat-name="' + idx + '" value="' + esc(cat.name || '') + '">'
+        + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button></div>'
+        + '<div class="category-items"><div class="dynamic-rows" data-cat-rows="' + idx + '">'
+        + rowsHTML
+        + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button></div></div>'
+      );
+    });
+  }
+  // Staff
+  if (data.staff && data.staff.length) {
+    const container = document.getElementById('staffRows');
+    container.innerHTML = '';
+    data.staff.forEach(vals => {
+      container.insertAdjacentHTML('beforeend',
+        '<div class="dynamic-row"><div class="row-fields">'
+        + '<div class="row-inline"><input type="text" placeholder="이름" data-save value="' + esc(vals[0] || '') + '">'
+        + '<input type="text" placeholder="직책" data-save value="' + esc(vals[1] || '') + '"></div>'
+        + '<input type="text" placeholder="소개 (선택)" data-save value="' + esc(vals[2] || '') + '">'
+        + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
+      );
+    });
+  }
+  // Reviews
+  if (data.reviews && data.reviews.length) {
+    const container = document.getElementById('reviewRows');
+    container.innerHTML = '';
+    data.reviews.forEach(vals => {
+      container.insertAdjacentHTML('beforeend',
+        '<div class="dynamic-row"><div class="row-fields">'
+        + '<input type="text" placeholder="고객명 (예: 김OO)" data-save value="' + esc(vals[0] || '') + '">'
+        + '<textarea rows="2" placeholder="후기 내용" data-save>' + esc(vals[1] || '') + '</textarea>'
+        + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
+      );
+    });
+  }
+  // FAQ
+  if (data.faq && data.faq.length) {
+    const container = document.getElementById('faqRows');
+    container.innerHTML = '';
+    data.faq.forEach(vals => {
+      container.insertAdjacentHTML('beforeend',
+        '<div class="dynamic-row"><div class="row-fields">'
+        + '<input type="text" placeholder="질문" data-save value="' + esc(vals[0] || '') + '">'
+        + '<textarea rows="2" placeholder="답변" data-save>' + esc(vals[1] || '') + '</textarea>'
+        + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
+      );
+    });
+  }
+}
+
+function esc(str) {
+  return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showAutosave() {
+  const el = document.getElementById('autosave');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+/* ===== CLIPBOARD COPY ===== */
+function buildText() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const tier = currentTier === 'light' ? 'Light (15만원)' : 'Basic (25만원)';
+  let lines = [];
+
+  lines.push('========================================');
+  lines.push('  동보웹 웹사이트 제작 의뢰서');
+  lines.push('========================================');
+  lines.push('');
+  lines.push('상품: ' + tier);
+  lines.push('');
+
+  // 1. 가게 정보
+  lines.push('── 가게 정보 ──');
+  if (v('shopName')) lines.push('이름: ' + v('shopName'));
+  if (v('shopType')) lines.push('업종: ' + v('shopType'));
+  if (v('shopDesc')) lines.push('소개: ' + v('shopDesc'));
+  if (v('shopYear')) lines.push('오픈: ' + v('shopYear'));
+  lines.push('');
+
+  // 2. 디자인
+  const designGroup = currentTier === 'light' ? '#designLight' : '#designBasic';
+  const checked = [];
+  document.querySelectorAll(designGroup + ' input:checked').forEach(el => checked.push(el.value));
+  if (checked.length) {
+    lines.push('── 마음에 드는 디자인 ──');
+    checked.forEach(c => lines.push('• ' + c));
+    lines.push('');
+  }
+
+  // 3. 메뉴
+  const cats = document.querySelectorAll('.category-block');
+  let hasMenu = false;
+  const menuLines = [];
+  cats.forEach(block => {
+    const catName = block.querySelector('[data-cat-name]').value.trim();
+    const items = [];
+    block.querySelectorAll('.dynamic-row').forEach(row => {
+      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      const name = inputs[0]?.value.trim() || '';
+      const price = inputs[1]?.value.trim() || '';
+      const desc = inputs[2]?.value.trim() || '';
+      if (name) {
+        let line = '  • ' + name;
+        if (price) line += ' — ' + price;
+        if (desc) line += ' (' + desc + ')';
+        items.push(line);
+      }
+    });
+    if (catName || items.length) {
+      hasMenu = true;
+      if (catName) menuLines.push('[' + catName + ']');
+      items.forEach(i => menuLines.push(i));
+    }
+  });
+  if (hasMenu) {
+    lines.push('── 메뉴 / 서비스 ──');
+    menuLines.forEach(l => lines.push(l));
+    lines.push('');
+  }
+
+  // 4. 위치
+  const locFields = [
+    ['주소', v('address')], ['찾아오는 길', v('directions')],
+    ['영업시간', v('hours')], ['휴무일', v('closedDay')], ['참고', v('locNote')]
+  ].filter(f => f[1]);
+  if (locFields.length) {
+    lines.push('── 위치 & 영업시간 ──');
+    locFields.forEach(f => lines.push(f[0] + ': ' + f[1]));
+    lines.push('');
+  }
+
+  // 5. 연락처
+  const contacts = [
+    ['전화', v('phone')], ['카카오톡', v('kakao')], ['인스타그램', v('instagram')]
+  ].filter(f => f[1]);
+  if (contacts.length) {
+    lines.push('── 연락처 ──');
+    contacts.forEach(f => lines.push(f[0] + ': ' + f[1]));
+    lines.push('');
+  }
+
+  // 6. 사진
+  const photos = [];
+  document.querySelectorAll('#photoChecklist input:checked').forEach(el => photos.push(el.value));
+  if (photos.length) {
+    lines.push('── 사진 준비 ──');
+    photos.forEach(p => lines.push('✓ ' + p));
+    lines.push('');
+  }
+
+  // Basic 전용
+  if (currentTier === 'basic') {
+    // 스태프
+    const staffItems = [];
+    document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
+      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      const name = inputs[0]?.value.trim() || '';
+      const role = inputs[1]?.value.trim() || '';
+      const desc = inputs[2]?.value.trim() || '';
+      if (name) {
+        let line = '• ' + name;
+        if (role) line += ' (' + role + ')';
+        if (desc) line += ' — ' + desc;
+        staffItems.push(line);
+      }
+    });
+    if (staffItems.length) {
+      lines.push('── 스태프 소개 ──');
+      staffItems.forEach(s => lines.push(s));
+      lines.push('');
+    }
+
+    // 후기
+    const reviewItems = [];
+    document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
+      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      const who = inputs[0]?.value.trim() || '';
+      const text = inputs[1]?.value.trim() || '';
+      if (who || text) reviewItems.push('• ' + (who ? who + ': ' : '') + text);
+    });
+    if (reviewItems.length) {
+      lines.push('── 고객 후기 ──');
+      reviewItems.forEach(r => lines.push(r));
+      lines.push('');
+    }
+
+    // FAQ
+    const faqItems = [];
+    document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
+      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      const q = inputs[0]?.value.trim() || '';
+      const a = inputs[1]?.value.trim() || '';
+      if (q) {
+        faqItems.push('Q. ' + q);
+        if (a) faqItems.push('A. ' + a);
+        faqItems.push('');
+      }
+    });
+    if (faqItems.length) {
+      lines.push('── FAQ ──');
+      faqItems.forEach(f => lines.push(f));
+    }
+  }
+
+  // 7. 기타
+  if (v('extra')) {
+    lines.push('── 기타 요청사항 ──');
+    lines.push(v('extra'));
+    lines.push('');
+  }
+
+  lines.push('========================================');
+  return lines.join('\n');
+}
+
+document.getElementById('btnCopy').addEventListener('click', () => {
+  const name = document.getElementById('shopName').value.trim();
+  const type = document.getElementById('shopType').value;
+  if (!name || !type) {
+    showToast('가게 이름과 업종은 필수입니다.');
+    if (!name) document.getElementById('shopName').focus();
+    else document.getElementById('shopType').focus();
+    return;
+  }
+  const text = buildText();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('의뢰서가 복사되었습니다!');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('의뢰서가 복사되었습니다!');
+  });
+});
+
+/* ===== KAKAO LINK ===== */
+document.getElementById('btnKakao').addEventListener('click', () => {
+  window.open('https://pf.kakao.com/_dongboweb/chat', '_blank', 'noopener,noreferrer');
+});
+
+/* ===== RESET ===== */
+document.getElementById('btnReset').addEventListener('click', () => {
+  if (!confirm('작성한 내용이 모두 삭제됩니다. 초기화하시겠습니까?')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  location.reload();
+});
+
+/* ===== TOAST ===== */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* ===== INPUT LISTENERS ===== */
+document.getElementById('mainForm').addEventListener('input', scheduleSave);
+document.getElementById('mainForm').addEventListener('change', scheduleSave);
+
+/* ===== INIT ===== */
+loadForm();
+updateProgress();
+updateSectionNumbers();
+</script>
+</body>
+</html>
