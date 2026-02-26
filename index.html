@@ -603,15 +603,18 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div id="reviewContent"></div>
       </div>
       <div class="submit-area">
-        <button type="button" class="btn-primary" id="btnCopy">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          의뢰서 복사하기
-        </button>
-        <button type="button" class="btn-secondary" id="btnKakao">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
+        <button type="button" class="btn-primary" id="btnKakao" style="background:#FEE500;color:#3C1E1E">
+          <svg viewBox="0 0 24 24" fill="#3C1E1E" width="20" height="20"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
           카카오톡으로 보내기
         </button>
-        <button type="button" class="btn-prev" onclick="goPrev()" style="width:100%;margin-top:4px">이전 단계로</button>
+        <button type="button" class="btn-secondary" id="btnCopy">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          의뢰서만 복사하기
+        </button>
+        <button type="button" class="btn-secondary" onclick="goPrev()" style="margin-top:4px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          이전 단계로
+        </button>
         <button type="button" class="btn-reset" id="btnReset">초기화</button>
       </div>
     </div>
@@ -1348,7 +1351,22 @@ document.getElementById('btnCopy').addEventListener('click', () => {
 
 /* ===== KAKAO LINK ===== */
 document.getElementById('btnKakao').addEventListener('click', () => {
-  window.open('https://pf.kakao.com/_zAqqX/chat', '_blank', 'noopener,noreferrer');
+  const text = buildText();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('의뢰서가 복사되었습니다! 카카오톡에 붙여넣기 해주세요.');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('의뢰서가 복사되었습니다! 카카오톡에 붙여넣기 해주세요.');
+  });
+  setTimeout(() => {
+    window.open('https://pf.kakao.com/_zAqqX/chat', '_blank', 'noopener,noreferrer');
+  }, 300);
 });
 
 /* ===== RESET ===== */
