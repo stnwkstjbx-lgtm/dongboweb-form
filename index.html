@@ -146,20 +146,19 @@ textarea{resize:vertical;min-height:80px}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 
-/* ===== DESIGN CARDS (thumbnail grid) ===== */
-.design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+/* ===== DESIGN CARDS (grid) ===== */
+.design-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .design-card{position:relative;border:2px solid var(--border2);border-radius:var(--radius);
-  overflow:hidden;cursor:pointer;transition:all .25s var(--ease);background:var(--surface)}
+  padding:16px 14px;cursor:pointer;transition:all .25s var(--ease);background:var(--surface)}
 .design-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.design-card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,89,152,.15)}
-.design-card-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--bg)}
-.design-card-info{padding:10px 12px}
-.design-card-name{font-size:13px;font-weight:700;letter-spacing:-.01em}
-.design-card-type{font-size:11px;color:var(--dim);margin-top:2px}
-.design-card-preview{display:block;font-size:11px;color:var(--accent);font-weight:600;margin-top:4px;
+.design-card.selected{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-light) 0%,var(--surface) 100%);
+  box-shadow:0 0 0 3px rgba(59,89,152,.12)}
+.design-card-name{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.design-card-type{font-size:12px;color:var(--dim);margin-top:3px}
+.design-card-preview{display:inline-block;font-size:11px;color:var(--accent);font-weight:600;margin-top:6px;
   text-decoration:none}
 .design-card-preview:hover{text-decoration:underline}
-.design-card-check{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;
+.design-card-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;
   background:var(--accent);display:none;align-items:center;justify-content:center;
   box-shadow:0 2px 6px rgba(59,89,152,.3)}
 .design-card.selected .design-card-check{display:flex}
@@ -311,12 +310,13 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   .step-indicator-label{display:none}
   .step-nav .btn-prev,.step-nav .btn-next{padding:14px 8px;font-size:14px}
   .header-badge{margin-top:12px}
-  .design-grid{grid-template-columns:repeat(2,1fr)}
   .optional-body-inner{padding:0 14px 14px}
 }
 @media(min-width:481px) and (max-width:768px){
   .container{padding:20px 16px 70px}
-  .design-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:769px){
+  .design-grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -441,123 +441,84 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <p class="step-desc">참고하고 싶은 디자인을 골라주세요. (복수 선택 가능)</p>
         <div class="design-grid" id="designLight">
           <div class="design-card" data-design="밀도 (베이커리)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80" alt="밀도">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">밀도</div>
-              <div class="design-card-type">베이커리</div>
-              <a href="https://dongboweb-mildo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">밀도</div>
+            <div class="design-card-type">베이커리</div>
+            <a href="https://dongboweb-mildo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="라루즈 (와인바)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80" alt="라루즈">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">라루즈</div>
-              <div class="design-card-type">와인바</div>
-              <a href="https://dongboweb-larouge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">라루즈</div>
+            <div class="design-card-type">와인바</div>
+            <a href="https://dongboweb-larouge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="소요 (필라테스)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80" alt="소요">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">소요</div>
-              <div class="design-card-type">필라테스</div>
-              <a href="https://dongboweb-soyo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">소요</div>
+            <div class="design-card-type">필라테스</div>
+            <a href="https://dongboweb-soyo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="뤼느 (헤어살롱)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="뤼느">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">뤼느</div>
-              <div class="design-card-type">헤어살롱</div>
-              <a href="https://dongboweb-noir-light.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">뤼느</div>
+            <div class="design-card-type">헤어살롱</div>
+            <a href="https://dongboweb-noir-light.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="프라임 (수학학원)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&q=80" alt="프라임">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">프라임</div>
-              <div class="design-card-type">수학학원</div>
-              <a href="https://dongboweb-prime.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">프라임</div>
+            <div class="design-card-type">수학학원</div>
+            <a href="https://dongboweb-prime.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="모카 (커피전문점)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80" alt="모카">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">모카</div>
-              <div class="design-card-type">커피전문점</div>
-              <a href="https://dongboweb-mocha.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">모카</div>
+            <div class="design-card-type">커피전문점</div>
+            <a href="https://dongboweb-mocha.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="쿠시 (이자카야)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&q=80" alt="쿠시">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">쿠시</div>
-              <div class="design-card-type">이자카야</div>
-              <a href="https://dongboweb-kushi.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">쿠시</div>
+            <div class="design-card-type">이자카야</div>
+            <a href="https://dongboweb-kushi.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
         </div>
         <div class="design-grid hidden" id="designBasic">
           <div class="design-card" data-design="느와르 (헤어살롱)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=400&q=80" alt="느와르">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">느와르</div>
-              <div class="design-card-type">헤어살롱</div>
-              <a href="https://dongboweb-noir.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">느와르</div>
+            <div class="design-card-type">헤어살롱</div>
+            <a href="https://dongboweb-noir.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="블랑 (네일살롱)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80" alt="블랑">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">블랑</div>
-              <div class="design-card-type">네일살롱</div>
-              <a href="https://dongboweb-blanc.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">블랑</div>
+            <div class="design-card-type">네일살롱</div>
+            <a href="https://dongboweb-blanc.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="아뜰리에 (인테리어)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&q=80" alt="아뜰리에">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">아뜰리에</div>
-              <div class="design-card-type">인테리어</div>
-              <a href="https://dongboweb-atelier.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">아뜰리에</div>
+            <div class="design-card-type">인테리어</div>
+            <a href="https://dongboweb-atelier.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="아우라 (요가)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&q=80" alt="아우라">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">아우라</div>
-              <div class="design-card-type">요가스튜디오</div>
-              <a href="https://dongboweb-aura.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">아우라</div>
+            <div class="design-card-type">요가스튜디오</div>
+            <a href="https://dongboweb-aura.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="포지 (PT)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80" alt="포지">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">포지</div>
-              <div class="design-card-type">PT스튜디오</div>
-              <a href="https://dongboweb-forge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">포지</div>
+            <div class="design-card-type">PT스튜디오</div>
+            <a href="https://dongboweb-forge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
           <div class="design-card" data-design="르셰프 (파인다이닝)">
-            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="르셰프">
             <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="design-card-info">
-              <div class="design-card-name">르셰프</div>
-              <div class="design-card-type">파인다이닝</div>
-              <a href="https://dongboweb-lechef.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
-            </div>
+            <div class="design-card-name">르셰프</div>
+            <div class="design-card-type">파인다이닝</div>
+            <a href="https://dongboweb-lechef.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
           </div>
         </div>
       </div>
