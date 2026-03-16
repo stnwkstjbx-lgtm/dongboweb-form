@@ -265,15 +265,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 #btnReset:hover{border-color:var(--error);color:var(--error);background:var(--error-bg)}
 #btnReset svg{width:15px;height:15px}
 
-/* ===== KAKAO BUTTON ===== */
-.btn-kakao{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;
-  border:none;border-radius:var(--radius);background:#FEE500;color:#3C1E1E;font-size:15px;
-  font-weight:700;cursor:pointer;transition:all .25s var(--ease);
-  box-shadow:0 4px 14px rgba(254,229,0,.35)}
-.btn-kakao:hover{box-shadow:0 6px 20px rgba(254,229,0,.5);transform:translateY(-1px)}
-.btn-kakao:active{transform:translateY(0)}
-.btn-kakao svg{width:20px;height:20px}
-
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--fg);color:#fff;padding:14px 24px;border-radius:var(--radius);font-size:14px;
@@ -791,11 +782,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div id="reviewContent"></div>
       </div>
       <div class="submit-area">
-        <button type="button" class="btn-kakao" id="btnKakao">
-          <svg viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.6-.99 3.83 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.44 4.28-2.86.56.08 1.14.12 1.72.12 5.52 0 10-3.58 10-7.94C22 6.58 17.52 3 12 3z"/></svg>
-          카카오톡으로 보내기
+        <button type="button" class="btn-primary" id="btnEmail">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+          이메일로 보내기
         </button>
-        <p class="submit-hint">버튼을 누르면 의뢰서가 자동 복사됩니다.<br>채팅창에 붙여넣기 해주세요.</p>
+        <p class="submit-hint">버튼을 누르면 메일 앱이 열립니다.<br>내용이 자동으로 채워집니다.</p>
         <button type="button" class="btn-secondary" id="btnCopy">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           의뢰서만 복사하기
@@ -1491,9 +1482,12 @@ document.getElementById('btnCopy').addEventListener('click', function() {
   copyText().then(function() { showToast('\uC758\uB8B0\uC11C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4!'); }).catch(function() { showToast('\uC758\uB8B0\uC11C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4!'); });
 });
 
-document.getElementById('btnKakao').addEventListener('click', function() {
-  copyText();
-  window.open('https://pf.kakao.com/_zAqqX/chat', '_blank', 'noopener,noreferrer');
+document.getElementById('btnEmail').addEventListener('click', function() {
+  var text = buildText();
+  var shopName = (document.getElementById('shopName') ? document.getElementById('shopName').value : '').trim();
+  var subject = '\uB3D9\uBCF4\uC6F9 \uC6F9\uC0AC\uC774\uD2B8 \uC81C\uC791 \uC758\uB8B0\uC11C' + (shopName ? ' - ' + shopName : '');
+  var mailto = 'mailto:dongboweb@naver.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+  window.location.href = mailto;
 });
 
 document.getElementById('btnReset').addEventListener('click', function() {
