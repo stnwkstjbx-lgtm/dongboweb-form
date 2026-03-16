@@ -53,7 +53,7 @@ input,select,textarea,button{font:inherit;color:inherit}
   max-width:130px;overflow:hidden;text-overflow:ellipsis}
 
 /* ===== LAYOUT ===== */
-.container{max-width:600px;margin:0 auto;padding:24px 20px 80px}
+.container{max-width:640px;margin:0 auto;padding:24px 20px 80px}
 
 /* ===== HEADER ===== */
 .header{text-align:center;margin-bottom:40px;padding-top:24px}
@@ -146,21 +146,45 @@ textarea{resize:vertical;min-height:80px}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 
-/* ===== CHECKBOX GROUP ===== */
-.check-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.check-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--border);
-  border-radius:var(--radius);cursor:pointer;transition:all .2s var(--ease);font-size:14px;
-  user-select:none;background:var(--surface)}
-.check-item:hover{border-color:var(--accent);background:var(--accent-glow)}
-.check-item:active{transform:scale(.98)}
-.check-item input{display:none}
-.check-item .check-box{width:20px;height:20px;border:2px solid var(--dim3);border-radius:6px;
-  display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease);flex-shrink:0}
-.check-item input:checked ~ .check-box{background:var(--accent);border-color:var(--accent);
+/* ===== DESIGN CARDS (thumbnail grid) ===== */
+.design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.design-card{position:relative;border:2px solid var(--border2);border-radius:var(--radius);
+  overflow:hidden;cursor:pointer;transition:all .25s var(--ease);background:var(--surface)}
+.design-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.design-card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,89,152,.15)}
+.design-card-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--bg)}
+.design-card-info{padding:10px 12px}
+.design-card-name{font-size:13px;font-weight:700;letter-spacing:-.01em}
+.design-card-type{font-size:11px;color:var(--dim);margin-top:2px}
+.design-card-preview{display:block;font-size:11px;color:var(--accent);font-weight:600;margin-top:4px;
+  text-decoration:none}
+.design-card-preview:hover{text-decoration:underline}
+.design-card-check{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);display:none;align-items:center;justify-content:center;
   box-shadow:0 2px 6px rgba(59,89,152,.3)}
-.check-item input:checked ~ .check-box::after{content:'';display:block;width:5px;height:9px;
-  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-.check-item input:checked ~ .check-text{color:var(--accent);font-weight:600}
+.design-card.selected .design-card-check{display:flex}
+
+/* ===== OPTIONAL ACCORDION ===== */
+.optional-hint{background:linear-gradient(135deg,var(--accent-light),#F0F4FF);
+  border:1px solid rgba(59,89,152,.12);border-radius:var(--radius);padding:16px 18px;
+  margin-bottom:20px;font-size:13px;color:var(--accent-dark);line-height:1.6}
+.optional-hint strong{font-weight:700}
+.optional-section{border:1px solid var(--border2);border-radius:var(--radius);margin-bottom:10px;
+  overflow:hidden;background:var(--surface);transition:border-color .2s}
+.optional-section:hover{border-color:var(--dim3)}
+.optional-header{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;
+  user-select:none;transition:background .2s}
+.optional-header:hover{background:var(--accent-glow)}
+.optional-header-icon{width:28px;height:28px;border-radius:8px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.optional-header-text{flex:1}
+.optional-header-title{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.optional-header-sub{font-size:11px;color:var(--dim);margin-top:1px}
+.toggle-icon{width:16px;height:16px;transition:transform .3s var(--ease);flex-shrink:0;color:var(--dim)}
+.optional-section.open .toggle-icon{transform:rotate(180deg)}
+.optional-body{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+.optional-section.open .optional-body{max-height:800px}
+.optional-body-inner{padding:0 18px 18px}
 
 /* ===== DYNAMIC ROWS ===== */
 .dynamic-rows{display:flex;flex-direction:column;gap:12px}
@@ -278,7 +302,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 @media(max-width:480px){
   .container{padding:16px 14px 60px}
   .step-content{padding:22px 18px}
-  .check-group{grid-template-columns:1fr}
   .row-inline{flex-direction:column;gap:8px}
   .header h1{font-size:22px}
   .step-desc{padding-left:0}
@@ -288,9 +311,12 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   .step-indicator-label{display:none}
   .step-nav .btn-prev,.step-nav .btn-next{padding:14px 8px;font-size:14px}
   .header-badge{margin-top:12px}
+  .design-grid{grid-template-columns:repeat(2,1fr)}
+  .optional-body-inner{padding:0 14px 14px}
 }
 @media(min-width:481px) and (max-width:768px){
   .container{padding:20px 16px 70px}
+  .design-grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -298,7 +324,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 <!-- Step Indicator (sticky top bar) -->
 <div class="step-indicator" id="stepIndicator">
-  <span class="step-indicator-text" id="stepText">1 / 7</span>
+  <span class="step-indicator-text" id="stepText">1 / 6</span>
   <div class="step-indicator-bar">
     <div class="step-indicator-fill" id="stepFill" style="width:0%"></div>
   </div>
@@ -320,8 +346,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       <span>동보웹</span>
     </div>
     <h1>웹사이트 제작 의뢰서</h1>
-    <p>폼을 작성해주시면<br>맞춤 웹사이트를 제작해드립니다.</p>
-    <div class="header-badge">약 3분 소요</div>
+    <p>필수 정보만 간단히 작성하면<br>맞춤 웹사이트를 제작해드립니다.</p>
+    <div class="header-badge">약 2분 소요</div>
   </header>
 
   <form id="mainForm" novalidate>
@@ -340,14 +366,14 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
             <div class="tier-card-badge">Light</div>
             <div class="tier-card-name">15만원</div>
             <div class="tier-card-price">단일 페이지</div>
-            <div class="tier-card-desc">5~7개 섹션의<br>깔끔한 원페이지 웹사이트</div>
+            <div class="tier-card-desc">10~14개 섹션의<br>프리미엄 원페이지 웹사이트</div>
           </div>
           <div class="tier-card" data-tier="basic">
             <div class="tier-card-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             <div class="tier-card-badge">Basic</div>
             <div class="tier-card-name">25만원</div>
             <div class="tier-card-price">고급 기능 포함</div>
-            <div class="tier-card-desc">8~12개 섹션 +<br>스태프, 후기, FAQ 등</div>
+            <div class="tier-card-desc">12~18개 섹션 +<br>다크모드, 고급 애니메이션 등</div>
           </div>
         </div>
       </div>
@@ -356,12 +382,12 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       </div>
     </div>
 
-    <!-- Step 1: 가게 정보 -->
+    <!-- Step 1: 기본 정보 -->
     <div class="step" data-step="shop">
       <div class="step-content">
         <div class="step-header">
           <div class="step-num">2</div>
-          <div class="step-title">가게 정보</div>
+          <div class="step-title">기본 정보</div>
         </div>
         <div class="field" id="fieldShopName">
           <label class="field-label">가게 이름 <span class="req">*</span></label>
@@ -405,7 +431,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       </div>
     </div>
 
-    <!-- Step 2: 마음에 드는 디자인 -->
+    <!-- Step 2: 디자인 선택 -->
     <div class="step" data-step="design">
       <div class="step-content">
         <div class="step-header">
@@ -413,23 +439,126 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           <div class="step-title">마음에 드는 디자인</div>
         </div>
         <p class="step-desc">참고하고 싶은 디자인을 골라주세요. (복수 선택 가능)</p>
-        <div class="photo-guide" style="margin-bottom:18px">
-          <p>디자인 미리보기</p>
-          <span class="guide-sub"><a href="https://dongboweb.vercel.app" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px">dongboweb.vercel.app</a>에서 각 디자인을 직접 확인하실 수 있습니다.</span>
+        <div class="design-grid" id="designLight">
+          <div class="design-card" data-design="밀도 (베이커리)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80" alt="밀도">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">밀도</div>
+              <div class="design-card-type">베이커리</div>
+              <a href="https://dongboweb-mildo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="라루즈 (와인바)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80" alt="라루즈">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">라루즈</div>
+              <div class="design-card-type">와인바</div>
+              <a href="https://dongboweb-larouge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="소요 (필라테스)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80" alt="소요">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">소요</div>
+              <div class="design-card-type">필라테스</div>
+              <a href="https://dongboweb-soyo.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="뤼느 (헤어살롱)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="뤼느">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">뤼느</div>
+              <div class="design-card-type">헤어살롱</div>
+              <a href="https://dongboweb-noir-light.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="프라임 (수학학원)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&q=80" alt="프라임">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">프라임</div>
+              <div class="design-card-type">수학학원</div>
+              <a href="https://dongboweb-prime.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="모카 (커피전문점)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80" alt="모카">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">모카</div>
+              <div class="design-card-type">커피전문점</div>
+              <a href="https://dongboweb-mocha.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="쿠시 (이자카야)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&q=80" alt="쿠시">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">쿠시</div>
+              <div class="design-card-type">이자카야</div>
+              <a href="https://dongboweb-kushi.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
         </div>
-        <div class="check-group" id="designLight">
-          <label class="check-item"><input type="checkbox" value="밀도 (베이커리)" data-save-check><span class="check-box"></span><span class="check-text">밀도</span></label>
-          <label class="check-item"><input type="checkbox" value="라루즈 (와인바)" data-save-check><span class="check-box"></span><span class="check-text">라루즈</span></label>
-          <label class="check-item"><input type="checkbox" value="소요 (필라테스)" data-save-check><span class="check-box"></span><span class="check-text">소요</span></label>
-          <label class="check-item"><input type="checkbox" value="뤼느 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">뤼느</span></label>
-          <label class="check-item"><input type="checkbox" value="프라임 (수학학원)" data-save-check><span class="check-box"></span><span class="check-text">프라임</span></label>
-        </div>
-        <div class="check-group hidden" id="designBasic">
-          <label class="check-item"><input type="checkbox" value="느와르 (헤어살롱)" data-save-check><span class="check-box"></span><span class="check-text">느와르</span></label>
-          <label class="check-item"><input type="checkbox" value="블랑 (네일살롱)" data-save-check><span class="check-box"></span><span class="check-text">블랑</span></label>
-          <label class="check-item"><input type="checkbox" value="아뜰리에 (인테리어)" data-save-check><span class="check-box"></span><span class="check-text">아뜰리에</span></label>
-          <label class="check-item"><input type="checkbox" value="아우라 (요가)" data-save-check><span class="check-box"></span><span class="check-text">아우라</span></label>
-          <label class="check-item"><input type="checkbox" value="포지 (PT)" data-save-check><span class="check-box"></span><span class="check-text">포지</span></label>
+        <div class="design-grid hidden" id="designBasic">
+          <div class="design-card" data-design="느와르 (헤어살롱)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=400&q=80" alt="느와르">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">느와르</div>
+              <div class="design-card-type">헤어살롱</div>
+              <a href="https://dongboweb-noir.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="블랑 (네일살롱)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80" alt="블랑">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">블랑</div>
+              <div class="design-card-type">네일살롱</div>
+              <a href="https://dongboweb-blanc.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="아뜰리에 (인테리어)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&q=80" alt="아뜰리에">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">아뜰리에</div>
+              <div class="design-card-type">인테리어</div>
+              <a href="https://dongboweb-atelier.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="아우라 (요가)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&q=80" alt="아우라">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">아우라</div>
+              <div class="design-card-type">요가스튜디오</div>
+              <a href="https://dongboweb-aura.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="포지 (PT)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80" alt="포지">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">포지</div>
+              <div class="design-card-type">PT스튜디오</div>
+              <a href="https://dongboweb-forge.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
+          <div class="design-card" data-design="르셰프 (파인다이닝)">
+            <img class="design-card-thumb" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="르셰프">
+            <div class="design-card-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="design-card-info">
+              <div class="design-card-name">르셰프</div>
+              <div class="design-card-type">파인다이닝</div>
+              <a href="https://dongboweb-lechef.vercel.app" target="_blank" rel="noopener noreferrer" class="design-card-preview" onclick="event.stopPropagation()">미리보기 &rarr;</a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="step-nav">
@@ -439,94 +568,18 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       <div class="skip-hint"><button type="button" onclick="goNext()">잘 모르겠으면 건너뛰기</button></div>
     </div>
 
-    <!-- Step 3: 메뉴/서비스 -->
-    <div class="step" data-step="menu">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num">4</div>
-          <div class="step-title">메뉴 / 서비스</div>
-        </div>
-        <p class="step-desc">대표 메뉴만 간단히 적어주세요.</p>
-        <div class="photo-guide" style="margin-bottom:20px">
-          <p>메뉴가 많으신가요?</p>
-          <span class="guide-sub">메뉴판 사진을 <strong>dongboweb@naver.com</strong>으로 보내주시면 저희가 정리해드립니다.<br>메일로 전달하실 경우 아래는 건너뛰고 다음으로 넘어가셔도 됩니다.</span>
-        </div>
-        <div id="categories">
-          <div class="category-block" data-cat="0">
-            <div class="category-header">
-              <input type="text" placeholder="카테고리명 (예: 음료, 커트, 수업 등)" data-save data-cat-name="0">
-              <button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button>
-            </div>
-            <div class="category-items">
-              <div class="dynamic-rows" data-cat-rows="0">
-                <div class="dynamic-row">
-                  <div class="row-fields">
-                    <div class="row-inline">
-                      <input type="text" placeholder="메뉴/서비스명" data-save>
-                      <input type="text" placeholder="가격" data-save style="max-width:120px">
-                    </div>
-                    <input type="text" placeholder="설명 (선택)" data-save>
-                  </div>
-                  <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
-                </div>
-              </div>
-              <button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button>
-            </div>
-          </div>
-        </div>
-        <button type="button" class="btn-add" onclick="addCategory()" style="margin-top:8px">+ 카테고리 추가</button>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-      <div class="skip-hint"><button type="button" onclick="goNext()">메일로 보낼게요, 건너뛰기</button></div>
-    </div>
-
-    <!-- Step 4: 위치 & 영업시간 -->
-    <div class="step" data-step="location">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num">5</div>
-          <div class="step-title">위치 &amp; 영업시간</div>
-        </div>
-        <div class="field">
-          <label class="field-label">주소</label>
-          <input type="text" id="address" placeholder="예: 서울시 강남구 역삼동 123-45" data-save>
-        </div>
-        <div class="field">
-          <label class="field-label">찾아오는 길</label>
-          <input type="text" id="directions" placeholder="예: 2호선 강남역 3번 출구 도보 5분" data-save>
-        </div>
-        <div class="field">
-          <label class="field-label">영업시간</label>
-          <input type="text" id="hours" placeholder="예: 매일 10:00 - 22:00" data-save>
-        </div>
-        <div class="field">
-          <label class="field-label">휴무일</label>
-          <input type="text" id="closedDay" placeholder="예: 매주 월요일" data-save>
-        </div>
-        <div class="field">
-          <label class="field-label">참고 사항</label>
-          <input type="text" id="locNote" placeholder="예: 주차 가능, 예약 필수 등" data-save>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-    </div>
-
-    <!-- Step 5: 연락처 -->
+    <!-- Step 3: 연락처 -->
     <div class="step" data-step="contact">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num">6</div>
+          <div class="step-num">4</div>
           <div class="step-title">연락처</div>
         </div>
-        <div class="field">
-          <label class="field-label">전화번호</label>
-          <input type="tel" id="phone" placeholder="예: 02-1234-5678" data-save>
+        <p class="step-desc">상담을 위한 연락처를 알려주세요.</p>
+        <div class="field" id="fieldPhone">
+          <label class="field-label">전화번호 <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="예: 010-1234-5678" data-save>
+          <div class="field-error">전화번호를 입력해주세요.</div>
         </div>
         <div class="field">
           <label class="field-label">카카오톡 채널</label>
@@ -543,131 +596,230 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       </div>
     </div>
 
-    <!-- Step 6: 사진 안내 -->
-    <div class="step" data-step="photo">
+    <!-- Step 4: 추가 정보 (아코디언) -->
+    <div class="step" data-step="optional">
       <div class="step-content">
         <div class="step-header">
-          <div class="step-num">7</div>
-          <div class="step-title">사진</div>
+          <div class="step-num">5</div>
+          <div class="step-title">추가 정보</div>
         </div>
-        <div class="photo-guide">
-          <p>사진은 메일로 보내주세요.</p>
-          <span class="guide-sub"><strong>dongboweb@naver.com</strong>으로 원본 사진을 보내주시면 됩니다.<br>아래 체크리스트를 참고해서 준비해주세요.</span>
+        <div class="optional-hint">
+          아래 항목은 <strong>지금 작성하지 않아도</strong> 됩니다.<br>상담 시 안내해드릴게요. 준비된 항목만 작성해주세요.
         </div>
-        <div class="photo-checklist" id="photoChecklist">
-          <label><input type="checkbox" data-save-check value="매장 외관"> 매장 외관</label>
-          <label><input type="checkbox" data-save-check value="매장 내부"> 매장 내부</label>
-          <label><input type="checkbox" data-save-check value="대표 메뉴/서비스"> 대표 메뉴 / 서비스</label>
-          <label><input type="checkbox" data-save-check value="로고"> 로고 (있는 경우)</label>
-          <label><input type="checkbox" data-save-check value="프로필/스태프"> 프로필 / 스태프 사진</label>
-          <label><input type="checkbox" data-save-check value="기타"> 기타 (분위기 사진 등)</label>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-    </div>
 
-    <!-- Basic 전용: 스태프 소개 -->
-    <div class="step basic-only" data-step="staff">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
-          <div class="step-title">스태프 소개</div>
-        </div>
-        <p class="step-desc">팀원 정보를 입력해주세요.</p>
-        <div class="dynamic-rows" id="staffRows">
-          <div class="dynamic-row">
-            <div class="row-fields">
-              <div class="row-inline">
-                <input type="text" placeholder="이름" data-save>
-                <input type="text" placeholder="직책" data-save>
+        <!-- 메뉴/서비스 -->
+        <div class="optional-section" id="optMenu">
+          <div class="optional-header" onclick="toggleOptional('optMenu')">
+            <div class="optional-header-icon">&#127860;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">메뉴 / 서비스</div>
+              <div class="optional-header-sub">대표 메뉴만 간단히</div>
+            </div>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div id="categories">
+                <div class="category-block" data-cat="0">
+                  <div class="category-header">
+                    <input type="text" placeholder="카테고리명 (예: 음료, 커트, 수업 등)" data-save data-cat-name="0">
+                    <button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button>
+                  </div>
+                  <div class="category-items">
+                    <div class="dynamic-rows" data-cat-rows="0">
+                      <div class="dynamic-row">
+                        <div class="row-fields">
+                          <div class="row-inline">
+                            <input type="text" placeholder="메뉴/서비스명" data-save>
+                            <input type="text" placeholder="가격" data-save style="max-width:120px">
+                          </div>
+                          <input type="text" placeholder="설명 (선택)" data-save>
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button>
+                  </div>
+                </div>
               </div>
-              <input type="text" placeholder="소개 (선택)" data-save>
+              <button type="button" class="btn-add" onclick="addCategory()" style="margin-top:8px">+ 카테고리 추가</button>
             </div>
-            <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
           </div>
         </div>
-        <button type="button" class="btn-add" onclick="addStaff()">+ 스태프 추가</button>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
-    </div>
 
-    <!-- Basic 전용: 고객 후기 -->
-    <div class="step basic-only" data-step="reviews">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
-          <div class="step-title">고객 후기</div>
-        </div>
-        <p class="step-desc">웹사이트에 넣고 싶은 후기를 적어주세요.</p>
-        <div class="dynamic-rows" id="reviewRows">
-          <div class="dynamic-row">
-            <div class="row-fields">
-              <input type="text" placeholder="고객명 (예: 김OO)" data-save>
-              <textarea rows="2" placeholder="후기 내용" data-save></textarea>
+        <!-- 위치 & 영업시간 -->
+        <div class="optional-section" id="optLocation">
+          <div class="optional-header" onclick="toggleOptional('optLocation')">
+            <div class="optional-header-icon">&#128205;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">위치 &amp; 영업시간</div>
+              <div class="optional-header-sub">주소, 영업시간, 휴무일</div>
             </div>
-            <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="field">
+                <label class="field-label">주소</label>
+                <input type="text" id="address" placeholder="예: 서울시 강남구 역삼동 123-45" data-save>
+              </div>
+              <div class="field">
+                <label class="field-label">찾아오는 길</label>
+                <input type="text" id="directions" placeholder="예: 2호선 강남역 3번 출구 도보 5분" data-save>
+              </div>
+              <div class="field">
+                <label class="field-label">영업시간</label>
+                <input type="text" id="hours" placeholder="예: 매일 10:00 - 22:00" data-save>
+              </div>
+              <div class="field">
+                <label class="field-label">휴무일</label>
+                <input type="text" id="closedDay" placeholder="예: 매주 월요일" data-save>
+              </div>
+              <div class="field">
+                <label class="field-label">참고 사항</label>
+                <input type="text" id="locNote" placeholder="예: 주차 가능, 예약 필수 등" data-save>
+              </div>
+            </div>
           </div>
         </div>
-        <button type="button" class="btn-add" onclick="addReview()">+ 후기 추가</button>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
-    </div>
 
-    <!-- Basic 전용: FAQ -->
-    <div class="step basic-only" data-step="faq">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num" style="background:linear-gradient(135deg,#6B8DD6,#8B5CF6)">+</div>
-          <div class="step-title">자주 묻는 질문 (FAQ)</div>
-        </div>
-        <p class="step-desc">고객이 자주 묻는 질문과 답변을 적어주세요.</p>
-        <div class="dynamic-rows" id="faqRows">
-          <div class="dynamic-row">
-            <div class="row-fields">
-              <input type="text" placeholder="질문" data-save>
-              <textarea rows="2" placeholder="답변" data-save></textarea>
+        <!-- 사진 안내 -->
+        <div class="optional-section" id="optPhoto">
+          <div class="optional-header" onclick="toggleOptional('optPhoto')">
+            <div class="optional-header-icon">&#128247;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">사진 안내</div>
+              <div class="optional-header-sub">준비할 사진 체크리스트</div>
             </div>
-            <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="photo-guide">
+                <p>사진은 카카오톡으로 보내주세요.</p>
+                <span class="guide-sub"><strong>카카오톡 채팅</strong>으로 원본 사진을 보내주시면 됩니다.<br>대용량 파일은 <strong>dongboweb@naver.com</strong>으로도 가능합니다.</span>
+              </div>
+              <div class="photo-checklist" id="photoChecklist">
+                <label><input type="checkbox" data-save-check value="매장 외관"> 매장 외관</label>
+                <label><input type="checkbox" data-save-check value="매장 내부"> 매장 내부</label>
+                <label><input type="checkbox" data-save-check value="대표 메뉴/서비스"> 대표 메뉴 / 서비스</label>
+                <label><input type="checkbox" data-save-check value="로고"> 로고 (있는 경우)</label>
+                <label><input type="checkbox" data-save-check value="프로필/스태프"> 프로필 / 스태프 사진</label>
+                <label><input type="checkbox" data-save-check value="기타"> 기타 (분위기 사진 등)</label>
+              </div>
+            </div>
           </div>
         </div>
-        <button type="button" class="btn-add" onclick="addFaq()">+ FAQ 추가</button>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
-        <button type="button" class="btn-next" onclick="goNext()">다음 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-      </div>
-      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰기</button></div>
-    </div>
 
-    <!-- Step 7: 기타 요청사항 -->
-    <div class="step" data-step="extra">
-      <div class="step-content">
-        <div class="step-header">
-          <div class="step-num">8</div>
-          <div class="step-title">기타 요청사항</div>
+        <!-- 고객 후기 -->
+        <div class="optional-section" id="optReviews">
+          <div class="optional-header" onclick="toggleOptional('optReviews')">
+            <div class="optional-header-icon">&#11088;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">고객 후기</div>
+              <div class="optional-header-sub">웹사이트에 넣고 싶은 후기</div>
+            </div>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="dynamic-rows" id="reviewRows">
+                <div class="dynamic-row">
+                  <div class="row-fields">
+                    <input type="text" placeholder="고객명 (예: 김OO)" data-save>
+                    <textarea rows="2" placeholder="후기 내용" data-save></textarea>
+                  </div>
+                  <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+                </div>
+              </div>
+              <button type="button" class="btn-add" onclick="addReview()">+ 후기 추가</button>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <textarea id="extra" rows="4" placeholder="추가로 넣고 싶은 내용이나 참고사항이 있다면 자유롭게 적어주세요." data-save></textarea>
+
+        <!-- FAQ -->
+        <div class="optional-section" id="optFaq">
+          <div class="optional-header" onclick="toggleOptional('optFaq')">
+            <div class="optional-header-icon">&#10067;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">자주 묻는 질문 (FAQ)</div>
+              <div class="optional-header-sub">고객이 자주 묻는 질문과 답변</div>
+            </div>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="dynamic-rows" id="faqRows">
+                <div class="dynamic-row">
+                  <div class="row-fields">
+                    <input type="text" placeholder="질문" data-save>
+                    <textarea rows="2" placeholder="답변" data-save></textarea>
+                  </div>
+                  <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+                </div>
+              </div>
+              <button type="button" class="btn-add" onclick="addFaq()">+ FAQ 추가</button>
+            </div>
+          </div>
         </div>
+
+        <!-- 스태프 소개 (Basic만) -->
+        <div class="optional-section basic-only-opt" id="optStaff">
+          <div class="optional-header" onclick="toggleOptional('optStaff')">
+            <div class="optional-header-icon">&#128100;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">스태프 소개</div>
+              <div class="optional-header-sub">팀원 정보 (Basic 전용)</div>
+            </div>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="dynamic-rows" id="staffRows">
+                <div class="dynamic-row">
+                  <div class="row-fields">
+                    <div class="row-inline">
+                      <input type="text" placeholder="이름" data-save>
+                      <input type="text" placeholder="직책" data-save>
+                    </div>
+                    <input type="text" placeholder="소개 (선택)" data-save>
+                  </div>
+                  <button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button>
+                </div>
+              </div>
+              <button type="button" class="btn-add" onclick="addStaff()">+ 스태프 추가</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 기타 요청사항 -->
+        <div class="optional-section" id="optExtra">
+          <div class="optional-header" onclick="toggleOptional('optExtra')">
+            <div class="optional-header-icon">&#128221;</div>
+            <div class="optional-header-text">
+              <div class="optional-header-title">기타 요청사항</div>
+              <div class="optional-header-sub">추가로 넣고 싶은 내용</div>
+            </div>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="optional-body">
+            <div class="optional-body-inner">
+              <div class="field">
+                <textarea id="extra" rows="4" placeholder="추가로 넣고 싶은 내용이나 참고사항이 있다면 자유롭게 적어주세요." data-save></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="step-nav">
         <button type="button" class="btn-prev" onclick="goPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 이전</button>
         <button type="button" class="btn-next" onclick="goNext()">확인하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
       </div>
+      <div class="skip-hint"><button type="button" onclick="goNext()">건너뛰고 바로 제출하기</button></div>
     </div>
 
-    <!-- Review Step -->
+    <!-- Step 5: 확인 & 제출 -->
     <div class="step" data-step="review">
       <div class="step-content">
         <div class="step-header">
@@ -708,64 +860,73 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 <script>
 /* ===== STATE ===== */
-let currentTier = null;
-let currentStepIdx = 0;
-let catCounter = 1;
-const STORAGE_KEY = 'dongboweb-form';
-let saveTimer = null;
+var currentTier = null;
+var currentStepIdx = 0;
+var catCounter = 1;
+var STORAGE_KEY = 'dongboweb-form-v2';
+var saveTimer = null;
 
 /* ===== STEP DEFINITIONS ===== */
-const STEPS_LIGHT = ['tier','shop','design','menu','location','contact','photo','extra','review'];
-const STEPS_BASIC = ['tier','shop','design','menu','location','contact','photo','staff','reviews','faq','extra','review'];
+var ALL_STEPS = ['tier','shop','design','contact','optional','review'];
 
-const STEP_LABELS = {
-  tier:'상품 선택', shop:'가게 정보', design:'디자인 선택', menu:'메뉴/서비스',
-  location:'위치 & 영업시간', contact:'연락처', photo:'사진', staff:'스태프 소개',
-  reviews:'고객 후기', faq:'FAQ', extra:'기타 요청', review:'확인'
+var STEP_LABELS = {
+  tier:'상품 선택', shop:'기본 정보', design:'디자인 선택',
+  contact:'연락처', optional:'추가 정보', review:'확인'
 };
 
 function getSteps() {
-  if (!currentTier) return ['tier'];
-  return currentTier === 'light' ? STEPS_LIGHT : STEPS_BASIC;
+  return ALL_STEPS;
+}
+
+/* ===== OPTIONAL ACCORDION ===== */
+function toggleOptional(id) {
+  var section = document.getElementById(id);
+  section.classList.toggle('open');
+  scheduleSave();
 }
 
 /* ===== STEP NAVIGATION ===== */
 function goTo(idx) {
-  const steps = getSteps();
+  var steps = getSteps();
   if (idx < 0 || idx >= steps.length) return;
 
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
 
-  const targetName = steps[idx];
-  const targetEl = document.querySelector('[data-step="' + targetName + '"]');
+  var targetName = steps[idx];
+  var targetEl = document.querySelector('[data-step="' + targetName + '"]');
   if (targetEl) targetEl.classList.add('active');
 
   currentStepIdx = idx;
   updateIndicator();
-  updateStepNumbers();
   window.scrollTo({ top: 0, behavior: 'instant' });
 
   if (targetName === 'review') buildReviewHTML();
 
+  // Show/hide basic-only optional sections
+  var basicOnlyOpts = document.querySelectorAll('.basic-only-opt');
+  basicOnlyOpts.forEach(function(el) {
+    el.style.display = currentTier === 'basic' ? '' : 'none';
+  });
+
   // Auto-focus first input on step
-  if (targetEl && targetName !== 'tier' && targetName !== 'review') {
-    const firstInput = targetEl.querySelector('input:not([type="checkbox"]),select,textarea');
-    if (firstInput) setTimeout(() => firstInput.focus(), 400);
+  if (targetEl && targetName !== 'tier' && targetName !== 'review' && targetName !== 'optional') {
+    var firstInput = targetEl.querySelector('input:not([type="checkbox"]),select,textarea');
+    if (firstInput) setTimeout(function() { firstInput.focus(); }, 400);
   }
 
   scheduleSave();
 }
 
 function goNext() {
-  const steps = getSteps();
-  const currentStepName = steps[currentStepIdx];
+  var steps = getSteps();
+  var currentStepName = steps[currentStepIdx];
 
   if (currentStepName === 'shop') {
-    let valid = true;
-    const nameField = document.getElementById('fieldShopName');
-    const typeField = document.getElementById('fieldShopType');
-    const nameVal = document.getElementById('shopName').value.trim();
-    const typeVal = document.getElementById('shopType').value;
+    var valid = true;
+    var nameField = document.getElementById('fieldShopName');
+    var typeField = document.getElementById('fieldShopType');
+    var nameVal = document.getElementById('shopName').value.trim();
+    var typeVal = document.getElementById('shopType').value;
 
     nameField.classList.toggle('has-error', !nameVal);
     typeField.classList.toggle('has-error', !typeVal);
@@ -775,6 +936,17 @@ function goNext() {
 
     if (!valid) {
       showToast('필수 항목을 입력해주세요.');
+      return;
+    }
+  }
+
+  if (currentStepName === 'contact') {
+    var phoneField = document.getElementById('fieldPhone');
+    var phoneVal = document.getElementById('phone').value.trim();
+    phoneField.classList.toggle('has-error', !phoneVal);
+    if (!phoneVal) {
+      document.getElementById('phone').focus();
+      showToast('전화번호를 입력해주세요.');
       return;
     }
   }
@@ -789,8 +961,8 @@ function goPrev() {
 /* ===== KEYBOARD NAVIGATION ===== */
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-    const steps = getSteps();
-    if (steps[currentStepIdx] !== 'tier' && steps[currentStepIdx] !== 'review') {
+    var steps = getSteps();
+    if (steps[currentStepIdx] !== 'tier' && steps[currentStepIdx] !== 'review' && steps[currentStepIdx] !== 'optional') {
       e.preventDefault();
       goNext();
     }
@@ -799,9 +971,9 @@ document.addEventListener('keydown', function(e) {
 
 /* ===== STEP INDICATOR ===== */
 function updateIndicator() {
-  const steps = getSteps();
-  const indicator = document.getElementById('stepIndicator');
-  const total = steps.length;
+  var steps = getSteps();
+  var indicator = document.getElementById('stepIndicator');
+  var total = steps.length;
 
   if (currentStepIdx === 0) {
     indicator.classList.remove('visible');
@@ -809,40 +981,24 @@ function updateIndicator() {
   }
 
   indicator.classList.add('visible');
-  document.getElementById('stepText').textContent = currentStepIdx + 1 + ' / ' + total;
-  const pct = (currentStepIdx / (total - 1)) * 100;
+  document.getElementById('stepText').textContent = (currentStepIdx + 1) + ' / ' + total;
+  var pct = (currentStepIdx / (total - 1)) * 100;
   document.getElementById('stepFill').style.width = pct + '%';
   document.getElementById('stepLabel').textContent = STEP_LABELS[steps[currentStepIdx]] || '';
 }
 
-function updateStepNumbers() {
-  const steps = getSteps();
-  let num = 1;
-  steps.forEach(name => {
-    const el = document.querySelector('[data-step="' + name + '"] .step-num');
-    if (!el) return;
-    if (name === 'review') return;
-    if (['staff','reviews','faq'].includes(name)) {
-      el.textContent = '+';
-    } else {
-      el.textContent = num;
-      num++;
-    }
-  });
-}
-
 /* ===== TIER SELECTION ===== */
-const tierCards = document.querySelectorAll('.tier-card');
-const tierNextBtn = document.getElementById('tierNextBtn');
-const designLight = document.getElementById('designLight');
-const designBasic = document.getElementById('designBasic');
+var tierCards = document.querySelectorAll('.tier-card');
+var tierNextBtn = document.getElementById('tierNextBtn');
+var designLight = document.getElementById('designLight');
+var designBasic = document.getElementById('designBasic');
 
-tierCards.forEach(card => {
-  card.addEventListener('click', () => {
-    const tier = card.dataset.tier;
+tierCards.forEach(function(card) {
+  card.addEventListener('click', function() {
+    var tier = card.dataset.tier;
     currentTier = tier;
 
-    tierCards.forEach(c => c.classList.toggle('selected', c.dataset.tier === tier));
+    tierCards.forEach(function(c) { c.classList.toggle('selected', c.dataset.tier === tier); });
 
     if (tier === 'light') {
       designLight.classList.remove('hidden');
@@ -854,10 +1010,17 @@ tierCards.forEach(card => {
 
     tierNextBtn.style.opacity = '1';
     tierNextBtn.style.pointerEvents = 'auto';
-    tierNextBtn.textContent = '';
-    tierNextBtn.innerHTML = (tier === 'light' ? 'Light' : 'Basic') + ' 선택 &#8594;';
-    tierNextBtn.onclick = () => goTo(1);
+    tierNextBtn.textContent = (tier === 'light' ? 'Light' : 'Basic') + ' 선택 \u2192';
+    tierNextBtn.onclick = function() { goTo(1); };
 
+    scheduleSave();
+  });
+});
+
+/* ===== DESIGN CARD SELECTION ===== */
+document.querySelectorAll('.design-card').forEach(function(card) {
+  card.addEventListener('click', function() {
+    card.classList.toggle('selected');
     scheduleSave();
   });
 });
@@ -865,48 +1028,48 @@ tierCards.forEach(card => {
 /* ===== DYNAMIC ROWS: MENU ===== */
 function menuRowHTML() {
   return '<div class="dynamic-row"><div class="row-fields">'
-    + '<div class="row-inline"><input type="text" placeholder="메뉴/서비스명" data-save>'
-    + '<input type="text" placeholder="가격" data-save style="max-width:120px"></div>'
-    + '<input type="text" placeholder="설명 (선택)" data-save>'
+    + '<div class="row-inline"><input type="text" placeholder="\uBA54\uB274/\uC11C\uBE44\uC2A4\uBA85" data-save>'
+    + '<input type="text" placeholder="\uAC00\uACA9" data-save style="max-width:120px"></div>'
+    + '<input type="text" placeholder="\uC124\uBA85 (\uC120\uD0DD)" data-save>'
     + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
 }
 
 function addMenuItem(btn) {
-  const rows = btn.previousElementSibling;
+  var rows = btn.previousElementSibling;
   rows.insertAdjacentHTML('beforeend', menuRowHTML());
   rows.lastElementChild.querySelector('input').focus();
   scheduleSave();
 }
 
 function addCategory() {
-  const idx = catCounter++;
-  const html = '<div class="category-block" data-cat="' + idx + '">'
-    + '<div class="category-header"><input type="text" placeholder="카테고리명 (예: 음료, 커트, 수업 등)" data-save data-cat-name="' + idx + '">'
-    + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button></div>'
+  var idx = catCounter++;
+  var html = '<div class="category-block" data-cat="' + idx + '">'
+    + '<div class="category-header"><input type="text" placeholder="\uCE74\uD14C\uACE0\uB9AC\uBA85 (\uC608: \uC74C\uB8CC, \uCEE4\uD2B8, \uC218\uC5C5 \uB4F1)" data-save data-cat-name="' + idx + '">'
+    + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="\uCE74\uD14C\uACE0\uB9AC \uC0AD\uC81C">&times;</button></div>'
     + '<div class="category-items"><div class="dynamic-rows" data-cat-rows="' + idx + '">'
     + menuRowHTML()
-    + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button></div></div>';
+    + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ \uBA54\uB274 \uCD94\uAC00</button></div></div>';
   document.getElementById('categories').insertAdjacentHTML('beforeend', html);
   document.querySelector('[data-cat="' + idx + '"] [data-cat-name]').focus();
   scheduleSave();
 }
 
 function removeCat(btn) {
-  const block = btn.closest('.category-block');
+  var block = btn.closest('.category-block');
   if (document.querySelectorAll('.category-block').length <= 1) return;
   block.style.opacity = '0';
   block.style.transform = 'translateY(-8px)';
-  setTimeout(() => { block.remove(); scheduleSave(); }, 200);
+  setTimeout(function() { block.remove(); scheduleSave(); }, 200);
 }
 
 /* ===== DYNAMIC ROWS: STAFF ===== */
 function addStaff() {
-  const html = '<div class="dynamic-row"><div class="row-fields">'
-    + '<div class="row-inline"><input type="text" placeholder="이름" data-save>'
-    + '<input type="text" placeholder="직책" data-save></div>'
-    + '<input type="text" placeholder="소개 (선택)" data-save>'
+  var html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<div class="row-inline"><input type="text" placeholder="\uC774\uB984" data-save>'
+    + '<input type="text" placeholder="\uC9C1\uCC45" data-save></div>'
+    + '<input type="text" placeholder="\uC18C\uAC1C (\uC120\uD0DD)" data-save>'
     + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
-  const rows = document.getElementById('staffRows');
+  var rows = document.getElementById('staffRows');
   rows.insertAdjacentHTML('beforeend', html);
   rows.lastElementChild.querySelector('input').focus();
   scheduleSave();
@@ -914,11 +1077,11 @@ function addStaff() {
 
 /* ===== DYNAMIC ROWS: REVIEWS ===== */
 function addReview() {
-  const html = '<div class="dynamic-row"><div class="row-fields">'
-    + '<input type="text" placeholder="고객명 (예: 김OO)" data-save>'
-    + '<textarea rows="2" placeholder="후기 내용" data-save></textarea>'
+  var html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<input type="text" placeholder="\uACE0\uAC1D\uBA85 (\uC608: \uAE40OO)" data-save>'
+    + '<textarea rows="2" placeholder="\uD6C4\uAE30 \uB0B4\uC6A9" data-save></textarea>'
     + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
-  const rows = document.getElementById('reviewRows');
+  var rows = document.getElementById('reviewRows');
   rows.insertAdjacentHTML('beforeend', html);
   rows.lastElementChild.querySelector('input').focus();
   scheduleSave();
@@ -926,11 +1089,11 @@ function addReview() {
 
 /* ===== DYNAMIC ROWS: FAQ ===== */
 function addFaq() {
-  const html = '<div class="dynamic-row"><div class="row-fields">'
-    + '<input type="text" placeholder="질문" data-save>'
-    + '<textarea rows="2" placeholder="답변" data-save></textarea>'
+  var html = '<div class="dynamic-row"><div class="row-fields">'
+    + '<input type="text" placeholder="\uC9C8\uBB38" data-save>'
+    + '<textarea rows="2" placeholder="\uB2F5\uBCC0" data-save></textarea>'
     + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
-  const rows = document.getElementById('faqRows');
+  var rows = document.getElementById('faqRows');
   rows.insertAdjacentHTML('beforeend', html);
   rows.lastElementChild.querySelector('input').focus();
   scheduleSave();
@@ -938,16 +1101,16 @@ function addFaq() {
 
 /* ===== REMOVE ROW ===== */
 function removeRow(btn) {
-  const row = btn.closest('.dynamic-row');
-  const container = row.parentElement;
+  var row = btn.closest('.dynamic-row');
+  var container = row.parentElement;
   if (container.children.length <= 1) {
-    row.querySelectorAll('input,textarea').forEach(el => { el.value = ''; });
+    row.querySelectorAll('input,textarea').forEach(function(el) { el.value = ''; });
     return;
   }
   row.style.opacity = '0';
   row.style.transform = 'translateX(16px)';
   row.style.transition = 'all .2s';
-  setTimeout(() => { row.remove(); scheduleSave(); }, 200);
+  setTimeout(function() { row.remove(); scheduleSave(); }, 200);
 }
 
 /* ===== LOCALSTORAGE AUTO-SAVE ===== */
@@ -957,134 +1120,157 @@ function scheduleSave() {
 }
 
 function saveForm() {
-  const data = { tier: currentTier, currentStep: currentStepIdx, fields: {}, checks: [], categories: [] };
-  document.querySelectorAll('#mainForm input[id][data-save], #mainForm select[id][data-save], #mainForm textarea[id][data-save]').forEach(el => {
+  var data = { tier: currentTier, currentStep: currentStepIdx, fields: {}, checks: [], categories: [], openSections: [] };
+  document.querySelectorAll('#mainForm input[id][data-save], #mainForm select[id][data-save], #mainForm textarea[id][data-save]').forEach(function(el) {
     data.fields[el.id] = el.value;
   });
-  document.querySelectorAll('[data-save-check]').forEach(el => {
+  document.querySelectorAll('[data-save-check]').forEach(function(el) {
     if (el.checked) data.checks.push(el.value);
   });
-  document.querySelectorAll('.category-block').forEach(block => {
-    const catName = block.querySelector('[data-cat-name]').value;
-    const items = [];
-    block.querySelectorAll('.dynamic-row').forEach(row => {
-      const vals = [];
-      row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+  // Design selections
+  data.designs = [];
+  document.querySelectorAll('.design-card.selected').forEach(function(card) {
+    data.designs.push(card.dataset.design);
+  });
+  // Categories
+  document.querySelectorAll('.category-block').forEach(function(block) {
+    var catName = block.querySelector('[data-cat-name]').value;
+    var items = [];
+    block.querySelectorAll('.dynamic-row').forEach(function(row) {
+      var vals = [];
+      row.querySelectorAll('input[data-save], textarea[data-save]').forEach(function(inp) { vals.push(inp.value); });
       items.push(vals);
     });
     data.categories.push({ name: catName, items: items });
   });
   data.staff = [];
-  document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
-    const vals = [];
-    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+  document.querySelectorAll('#staffRows .dynamic-row').forEach(function(row) {
+    var vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(function(inp) { vals.push(inp.value); });
     data.staff.push(vals);
   });
   data.reviews = [];
-  document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
-    const vals = [];
-    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+  document.querySelectorAll('#reviewRows .dynamic-row').forEach(function(row) {
+    var vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(function(inp) { vals.push(inp.value); });
     data.reviews.push(vals);
   });
   data.faq = [];
-  document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
-    const vals = [];
-    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(inp => vals.push(inp.value));
+  document.querySelectorAll('#faqRows .dynamic-row').forEach(function(row) {
+    var vals = [];
+    row.querySelectorAll('input[data-save], textarea[data-save]').forEach(function(inp) { vals.push(inp.value); });
     data.faq.push(vals);
+  });
+  // Open accordion sections
+  document.querySelectorAll('.optional-section.open').forEach(function(s) {
+    data.openSections.push(s.id);
   });
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); showAutosave(); } catch (e) {}
 }
 
 function loadForm() {
-  let raw;
+  var raw;
   try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
   if (!raw) return;
-  let data;
+  var data;
   try { data = JSON.parse(raw); } catch (e) { return; }
   if (data.tier) {
     currentTier = data.tier;
-    tierCards.forEach(c => c.classList.toggle('selected', c.dataset.tier === data.tier));
+    tierCards.forEach(function(c) { c.classList.toggle('selected', c.dataset.tier === data.tier); });
     if (data.tier === 'light') { designLight.classList.remove('hidden'); designBasic.classList.add('hidden'); }
     else { designLight.classList.add('hidden'); designBasic.classList.remove('hidden'); }
     tierNextBtn.style.opacity = '1';
     tierNextBtn.style.pointerEvents = 'auto';
-    tierNextBtn.innerHTML = (data.tier === 'light' ? 'Light' : 'Basic') + ' 선택 &#8594;';
-    tierNextBtn.onclick = () => goTo(1);
+    tierNextBtn.textContent = (data.tier === 'light' ? 'Light' : 'Basic') + ' \uC120\uD0DD \u2192';
+    tierNextBtn.onclick = function() { goTo(1); };
   }
   if (data.fields) {
-    Object.entries(data.fields).forEach(([id, val]) => {
-      const el = document.getElementById(id);
-      if (el) el.value = val;
+    Object.keys(data.fields).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = data.fields[id];
     });
   }
   if (data.checks) {
-    document.querySelectorAll('[data-save-check]').forEach(el => {
-      el.checked = data.checks.includes(el.value);
+    document.querySelectorAll('[data-save-check]').forEach(function(el) {
+      el.checked = data.checks.indexOf(el.value) >= 0;
+    });
+  }
+  // Design selections
+  if (data.designs) {
+    document.querySelectorAll('.design-card').forEach(function(card) {
+      card.classList.toggle('selected', data.designs.indexOf(card.dataset.design) >= 0);
     });
   }
   if (data.categories && data.categories.length) {
-    const container = document.getElementById('categories');
-    container.innerHTML = '';
-    data.categories.forEach((cat, ci) => {
-      const idx = ci === 0 ? 0 : catCounter++;
-      let rowsHTML = '';
-      cat.items.forEach(item => {
+    var container = document.getElementById('categories');
+    container.textContent = '';
+    data.categories.forEach(function(cat, ci) {
+      var idx = ci === 0 ? 0 : catCounter++;
+      var rowsHTML = '';
+      cat.items.forEach(function(item) {
         rowsHTML += '<div class="dynamic-row"><div class="row-fields">'
-          + '<div class="row-inline"><input type="text" placeholder="메뉴/서비스명" data-save value="' + esc(item[0] || '') + '">'
-          + '<input type="text" placeholder="가격" data-save style="max-width:120px" value="' + esc(item[1] || '') + '"></div>'
-          + '<input type="text" placeholder="설명 (선택)" data-save value="' + esc(item[2] || '') + '">'
+          + '<div class="row-inline"><input type="text" placeholder="\uBA54\uB274/\uC11C\uBE44\uC2A4\uBA85" data-save value="' + esc(item[0] || '') + '">'
+          + '<input type="text" placeholder="\uAC00\uACA9" data-save style="max-width:120px" value="' + esc(item[1] || '') + '"></div>'
+          + '<input type="text" placeholder="\uC124\uBA85 (\uC120\uD0DD)" data-save value="' + esc(item[2] || '') + '">'
           + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>';
       });
       if (!cat.items.length) rowsHTML = menuRowHTML();
       container.insertAdjacentHTML('beforeend',
         '<div class="category-block" data-cat="' + idx + '">'
-        + '<div class="category-header"><input type="text" placeholder="카테고리명" data-save data-cat-name="' + idx + '" value="' + esc(cat.name || '') + '">'
-        + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="카테고리 삭제">&times;</button></div>'
+        + '<div class="category-header"><input type="text" placeholder="\uCE74\uD14C\uACE0\uB9AC\uBA85" data-save data-cat-name="' + idx + '" value="' + esc(cat.name || '') + '">'
+        + '<button type="button" class="btn-remove" onclick="removeCat(this)" title="\uCE74\uD14C\uACE0\uB9AC \uC0AD\uC81C">&times;</button></div>'
         + '<div class="category-items"><div class="dynamic-rows" data-cat-rows="' + idx + '">'
         + rowsHTML
-        + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ 메뉴 추가</button></div></div>'
+        + '</div><button type="button" class="btn-add" onclick="addMenuItem(this)">+ \uBA54\uB274 \uCD94\uAC00</button></div></div>'
       );
     });
   }
   if (data.staff && data.staff.length) {
-    const container = document.getElementById('staffRows');
-    container.innerHTML = '';
-    data.staff.forEach(vals => {
-      container.insertAdjacentHTML('beforeend',
+    var staffContainer = document.getElementById('staffRows');
+    staffContainer.textContent = '';
+    data.staff.forEach(function(vals) {
+      staffContainer.insertAdjacentHTML('beforeend',
         '<div class="dynamic-row"><div class="row-fields">'
-        + '<div class="row-inline"><input type="text" placeholder="이름" data-save value="' + esc(vals[0] || '') + '">'
-        + '<input type="text" placeholder="직책" data-save value="' + esc(vals[1] || '') + '"></div>'
-        + '<input type="text" placeholder="소개 (선택)" data-save value="' + esc(vals[2] || '') + '">'
+        + '<div class="row-inline"><input type="text" placeholder="\uC774\uB984" data-save value="' + esc(vals[0] || '') + '">'
+        + '<input type="text" placeholder="\uC9C1\uCC45" data-save value="' + esc(vals[1] || '') + '"></div>'
+        + '<input type="text" placeholder="\uC18C\uAC1C (\uC120\uD0DD)" data-save value="' + esc(vals[2] || '') + '">'
         + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
       );
     });
   }
   if (data.reviews && data.reviews.length) {
-    const container = document.getElementById('reviewRows');
-    container.innerHTML = '';
-    data.reviews.forEach(vals => {
-      container.insertAdjacentHTML('beforeend',
+    var reviewContainer = document.getElementById('reviewRows');
+    reviewContainer.textContent = '';
+    data.reviews.forEach(function(vals) {
+      reviewContainer.insertAdjacentHTML('beforeend',
         '<div class="dynamic-row"><div class="row-fields">'
-        + '<input type="text" placeholder="고객명 (예: 김OO)" data-save value="' + esc(vals[0] || '') + '">'
-        + '<textarea rows="2" placeholder="후기 내용" data-save>' + esc(vals[1] || '') + '</textarea>'
+        + '<input type="text" placeholder="\uACE0\uAC1D\uBA85 (\uC608: \uAE40OO)" data-save value="' + esc(vals[0] || '') + '">'
+        + '<textarea rows="2" placeholder="\uD6C4\uAE30 \uB0B4\uC6A9" data-save>' + esc(vals[1] || '') + '</textarea>'
         + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
       );
     });
   }
   if (data.faq && data.faq.length) {
-    const container = document.getElementById('faqRows');
-    container.innerHTML = '';
-    data.faq.forEach(vals => {
-      container.insertAdjacentHTML('beforeend',
+    var faqContainer = document.getElementById('faqRows');
+    faqContainer.textContent = '';
+    data.faq.forEach(function(vals) {
+      faqContainer.insertAdjacentHTML('beforeend',
         '<div class="dynamic-row"><div class="row-fields">'
-        + '<input type="text" placeholder="질문" data-save value="' + esc(vals[0] || '') + '">'
-        + '<textarea rows="2" placeholder="답변" data-save>' + esc(vals[1] || '') + '</textarea>'
+        + '<input type="text" placeholder="\uC9C8\uBB38" data-save value="' + esc(vals[0] || '') + '">'
+        + '<textarea rows="2" placeholder="\uB2F5\uBCC0" data-save>' + esc(vals[1] || '') + '</textarea>'
         + '</div><button type="button" class="btn-remove" onclick="removeRow(this)">&times;</button></div>'
       );
     });
   }
+  // Restore open sections
+  if (data.openSections) {
+    data.openSections.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('open');
+    });
+  }
   if (typeof data.currentStep === 'number' && data.tier) {
-    const steps = getSteps();
+    var steps = getSteps();
     goTo(Math.min(data.currentStep, steps.length - 1));
   }
 }
@@ -1094,157 +1280,180 @@ function esc(str) {
 }
 
 function showAutosave() {
-  const el = document.getElementById('autosave');
+  var el = document.getElementById('autosave');
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 1500);
+  setTimeout(function() { el.classList.remove('show'); }, 1500);
 }
 
 /* ===== REVIEW STEP ===== */
 function buildReviewHTML() {
-  const v = id => (document.getElementById(id)?.value || '').trim();
-  const container = document.getElementById('reviewContent');
-  let html = '';
-  function sec(title, stepName, bodyHTML) {
+  var v = function(id) { return (document.getElementById(id) ? document.getElementById(id).value : '').trim(); };
+  var container = document.getElementById('reviewContent');
+  var html = '';
+  function sec(title, stepIdx, bodyHTML) {
     if (!bodyHTML) return '';
-    const steps = getSteps();
-    const idx = steps.indexOf(stepName);
     return '<div class="review-section">'
       + '<div class="review-section-header">'
       + '<span class="review-section-title">' + title + '</span>'
-      + (idx >= 0 ? '<button type="button" class="review-edit-btn" onclick="goTo(' + idx + ')">수정</button>' : '')
+      + (stepIdx >= 0 ? '<button type="button" class="review-edit-btn" onclick="goTo(' + stepIdx + ')">수정</button>' : '')
       + '</div><div class="review-section-body">' + bodyHTML + '</div></div>';
   }
   function line(label, val) {
     if (!val) return '';
     return '<div class="review-line"><span class="review-label">' + label + '</span>' + esc(val) + '</div>';
   }
-  const tierText = currentTier === 'light' ? 'Light (15만원)' : 'Basic (25만원)';
-  html += sec('상품', 'tier', '<div class="review-line">' + esc(tierText) + '</div>');
-  let shopBody = '';
-  shopBody += line('가게 이름', v('shopName'));
-  shopBody += line('업종', v('shopType'));
-  shopBody += line('소개', v('shopDesc'));
-  shopBody += line('오픈 연도', v('shopYear'));
-  html += sec('가게 정보', 'shop', shopBody);
-  const designGroup = currentTier === 'light' ? '#designLight' : '#designBasic';
-  const checked = [];
-  document.querySelectorAll(designGroup + ' input:checked').forEach(el => checked.push(el.value));
-  if (checked.length) html += sec('마음에 드는 디자인', 'design', checked.map(c => '<div class="review-line">' + esc(c) + '</div>').join(''));
-  let menuBody = '';
-  document.querySelectorAll('.category-block').forEach(block => {
-    const catName = block.querySelector('[data-cat-name]').value.trim();
-    const items = [];
-    block.querySelectorAll('.dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const name = inputs[0]?.value.trim() || '';
-      const price = inputs[1]?.value.trim() || '';
-      const desc = inputs[2]?.value.trim() || '';
+  var tierText = currentTier === 'light' ? 'Light (15\uB9CC\uC6D0)' : 'Basic (25\uB9CC\uC6D0)';
+  html += sec('\uC0C1\uD488', 0, '<div class="review-line">' + esc(tierText) + '</div>');
+
+  var shopBody = '';
+  shopBody += line('\uAC00\uAC8C \uC774\uB984', v('shopName'));
+  shopBody += line('\uC5C5\uC885', v('shopType'));
+  shopBody += line('\uC18C\uAC1C', v('shopDesc'));
+  shopBody += line('\uC624\uD508 \uC5F0\uB3C4', v('shopYear'));
+  html += sec('\uAE30\uBCF8 \uC815\uBCF4', 1, shopBody);
+
+  // Designs
+  var designGroupId = currentTier === 'light' ? 'designLight' : 'designBasic';
+  var selectedDesigns = [];
+  document.querySelectorAll('#' + designGroupId + ' .design-card.selected').forEach(function(card) {
+    selectedDesigns.push(card.dataset.design);
+  });
+  if (selectedDesigns.length) html += sec('\uB9C8\uC74C\uC5D0 \uB4DC\uB294 \uB514\uC790\uC778', 2, selectedDesigns.map(function(d) { return '<div class="review-line">' + esc(d) + '</div>'; }).join(''));
+
+  // Contact
+  var contactBody = '';
+  contactBody += line('\uC804\uD654', v('phone'));
+  contactBody += line('\uCE74\uCE74\uC624\uD1A1', v('kakao'));
+  contactBody += line('\uC778\uC2A4\uD0C0\uADF8\uB7A8', v('instagram'));
+  if (contactBody) html += sec('\uC5F0\uB77D\uCC98', 3, contactBody);
+
+  // Menu
+  var menuBody = '';
+  document.querySelectorAll('.category-block').forEach(function(block) {
+    var catName = block.querySelector('[data-cat-name]').value.trim();
+    var items = [];
+    block.querySelectorAll('.dynamic-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      var name = inputs[0] ? inputs[0].value.trim() : '';
+      var price = inputs[1] ? inputs[1].value.trim() : '';
+      var desc = inputs[2] ? inputs[2].value.trim() : '';
       if (name) {
-        let t = esc(name);
-        if (price) t += ' — ' + esc(price);
+        var t = esc(name);
+        if (price) t += ' \u2014 ' + esc(price);
         if (desc) t += ' <span class="review-sub">(' + esc(desc) + ')</span>';
         items.push(t);
       }
     });
     if (catName || items.length) {
       if (catName) menuBody += '<div class="review-line"><strong>' + esc(catName) + '</strong></div>';
-      items.forEach(i => menuBody += '<div class="review-line" style="padding-left:12px">' + i + '</div>');
+      items.forEach(function(i) { menuBody += '<div class="review-line" style="padding-left:12px">' + i + '</div>'; });
     }
   });
-  if (menuBody) html += sec('메뉴 / 서비스', 'menu', menuBody);
-  let locBody = '';
-  locBody += line('주소', v('address'));
-  locBody += line('찾아오는 길', v('directions'));
-  locBody += line('영업시간', v('hours'));
-  locBody += line('휴무일', v('closedDay'));
-  locBody += line('참고', v('locNote'));
-  if (locBody) html += sec('위치 & 영업시간', 'location', locBody);
-  let contactBody = '';
-  contactBody += line('전화', v('phone'));
-  contactBody += line('카카오톡', v('kakao'));
-  contactBody += line('인스타그램', v('instagram'));
-  if (contactBody) html += sec('연락처', 'contact', contactBody);
-  const photos = [];
-  document.querySelectorAll('#photoChecklist input:checked').forEach(el => photos.push(el.value));
-  if (photos.length) html += sec('사진 준비', 'photo', photos.map(p => '<div class="review-line">' + esc(p) + '</div>').join(''));
+  if (menuBody) html += sec('\uBA54\uB274 / \uC11C\uBE44\uC2A4', 4, menuBody);
+
+  // Location
+  var locBody = '';
+  locBody += line('\uC8FC\uC18C', v('address'));
+  locBody += line('\uCC3E\uC544\uC624\uB294 \uAE38', v('directions'));
+  locBody += line('\uC601\uC5C5\uC2DC\uAC04', v('hours'));
+  locBody += line('\uD734\uBB34\uC77C', v('closedDay'));
+  locBody += line('\uCC38\uACE0', v('locNote'));
+  if (locBody) html += sec('\uC704\uCE58 & \uC601\uC5C5\uC2DC\uAC04', 4, locBody);
+
+  // Photos
+  var photos = [];
+  document.querySelectorAll('#photoChecklist input:checked').forEach(function(el) { photos.push(el.value); });
+  if (photos.length) html += sec('\uC0AC\uC9C4 \uC900\uBE44', 4, photos.map(function(p) { return '<div class="review-line">' + esc(p) + '</div>'; }).join(''));
+
+  // Reviews
+  var revBody = '';
+  document.querySelectorAll('#reviewRows .dynamic-row').forEach(function(row) {
+    var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+    var who = inputs[0] ? inputs[0].value.trim() : '';
+    var text = inputs[1] ? inputs[1].value.trim() : '';
+    if (who || text) revBody += '<div class="review-line">' + esc(who ? who + ': ' : '') + esc(text) + '</div>';
+  });
+  if (revBody) html += sec('\uACE0\uAC1D \uD6C4\uAE30', 4, revBody);
+
+  // FAQ
+  var faqBody = '';
+  document.querySelectorAll('#faqRows .dynamic-row').forEach(function(row) {
+    var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+    var q = inputs[0] ? inputs[0].value.trim() : '';
+    var a = inputs[1] ? inputs[1].value.trim() : '';
+    if (q) {
+      faqBody += '<div class="review-line"><strong>Q.</strong> ' + esc(q) + '</div>';
+      if (a) faqBody += '<div class="review-line" style="padding-left:12px"><strong>A.</strong> ' + esc(a) + '</div>';
+    }
+  });
+  if (faqBody) html += sec('FAQ', 4, faqBody);
+
+  // Staff (basic only)
   if (currentTier === 'basic') {
-    let staffBody = '';
-    document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const name = inputs[0]?.value.trim() || '';
-      const role = inputs[1]?.value.trim() || '';
-      const desc = inputs[2]?.value.trim() || '';
+    var staffBody = '';
+    document.querySelectorAll('#staffRows .dynamic-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      var name = inputs[0] ? inputs[0].value.trim() : '';
+      var role = inputs[1] ? inputs[1].value.trim() : '';
+      var desc = inputs[2] ? inputs[2].value.trim() : '';
       if (name) {
-        let t = esc(name);
+        var t = esc(name);
         if (role) t += ' (' + esc(role) + ')';
-        if (desc) t += ' — ' + esc(desc);
+        if (desc) t += ' \u2014 ' + esc(desc);
         staffBody += '<div class="review-line">' + t + '</div>';
       }
     });
-    if (staffBody) html += sec('스태프 소개', 'staff', staffBody);
-    let revBody = '';
-    document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const who = inputs[0]?.value.trim() || '';
-      const text = inputs[1]?.value.trim() || '';
-      if (who || text) revBody += '<div class="review-line">' + esc(who ? who + ': ' : '') + esc(text) + '</div>';
-    });
-    if (revBody) html += sec('고객 후기', 'reviews', revBody);
-    let faqBody = '';
-    document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const q = inputs[0]?.value.trim() || '';
-      const a = inputs[1]?.value.trim() || '';
-      if (q) {
-        faqBody += '<div class="review-line"><strong>Q.</strong> ' + esc(q) + '</div>';
-        if (a) faqBody += '<div class="review-line" style="padding-left:12px"><strong>A.</strong> ' + esc(a) + '</div>';
-      }
-    });
-    if (faqBody) html += sec('FAQ', 'faq', faqBody);
+    if (staffBody) html += sec('\uC2A4\uD0DC\uD504 \uC18C\uAC1C', 4, staffBody);
   }
-  if (v('extra')) html += sec('기타 요청사항', 'extra', '<div class="review-line">' + esc(v('extra')) + '</div>');
+
+  if (v('extra')) html += sec('\uAE30\uD0C0 \uC694\uCCAD\uC0AC\uD56D', 4, '<div class="review-line">' + esc(v('extra')) + '</div>');
   container.innerHTML = html;
 }
 
 /* ===== CLIPBOARD COPY ===== */
 function buildText() {
-  const v = id => (document.getElementById(id)?.value || '').trim();
-  const tier = currentTier === 'light' ? 'Light (15만원)' : 'Basic (25만원)';
-  let lines = [];
+  var v = function(id) { return (document.getElementById(id) ? document.getElementById(id).value : '').trim(); };
+  var tier = currentTier === 'light' ? 'Light (15\uB9CC\uC6D0)' : 'Basic (25\uB9CC\uC6D0)';
+  var lines = [];
   lines.push('========================================');
-  lines.push('  동보웹 웹사이트 제작 의뢰서');
+  lines.push('  \uB3D9\uBCF4\uC6F9 \uC6F9\uC0AC\uC774\uD2B8 \uC81C\uC791 \uC758\uB8B0\uC11C');
   lines.push('========================================');
   lines.push('');
-  lines.push('상품: ' + tier);
+  lines.push('\uC0C1\uD488: ' + tier);
   lines.push('');
-  lines.push('── 가게 정보 ──');
-  if (v('shopName')) lines.push('이름: ' + v('shopName'));
-  if (v('shopType')) lines.push('업종: ' + v('shopType'));
-  if (v('shopDesc')) lines.push('소개: ' + v('shopDesc'));
-  if (v('shopYear')) lines.push('오픈: ' + v('shopYear'));
+  lines.push('\u2500\u2500 \uAE30\uBCF8 \uC815\uBCF4 \u2500\u2500');
+  if (v('shopName')) lines.push('\uC774\uB984: ' + v('shopName'));
+  if (v('shopType')) lines.push('\uC5C5\uC885: ' + v('shopType'));
+  if (v('shopDesc')) lines.push('\uC18C\uAC1C: ' + v('shopDesc'));
+  if (v('shopYear')) lines.push('\uC624\uD508: ' + v('shopYear'));
   lines.push('');
-  const designGroup = currentTier === 'light' ? '#designLight' : '#designBasic';
-  const checked = [];
-  document.querySelectorAll(designGroup + ' input:checked').forEach(el => checked.push(el.value));
+
+  var designGroupId = currentTier === 'light' ? 'designLight' : 'designBasic';
+  var checked = [];
+  document.querySelectorAll('#' + designGroupId + ' .design-card.selected').forEach(function(card) { checked.push(card.dataset.design); });
   if (checked.length) {
-    lines.push('── 마음에 드는 디자인 ──');
-    checked.forEach(c => lines.push('• ' + c));
+    lines.push('\u2500\u2500 \uB9C8\uC74C\uC5D0 \uB4DC\uB294 \uB514\uC790\uC778 \u2500\u2500');
+    checked.forEach(function(c) { lines.push('\u2022 ' + c); });
     lines.push('');
   }
-  const cats = document.querySelectorAll('.category-block');
-  let hasMenu = false;
-  const menuLines = [];
-  cats.forEach(block => {
-    const catName = block.querySelector('[data-cat-name]').value.trim();
-    const items = [];
-    block.querySelectorAll('.dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const name = inputs[0]?.value.trim() || '';
-      const price = inputs[1]?.value.trim() || '';
-      const desc = inputs[2]?.value.trim() || '';
+
+  var contacts = [['\uC804\uD654',v('phone')],['\uCE74\uCE74\uC624\uD1A1',v('kakao')],['\uC778\uC2A4\uD0C0\uADF8\uB7A8',v('instagram')]].filter(function(f) { return f[1]; });
+  if (contacts.length) { lines.push('\u2500\u2500 \uC5F0\uB77D\uCC98 \u2500\u2500'); contacts.forEach(function(f) { lines.push(f[0]+': '+f[1]); }); lines.push(''); }
+
+  var cats = document.querySelectorAll('.category-block');
+  var hasMenu = false;
+  var menuLines = [];
+  cats.forEach(function(block) {
+    var catName = block.querySelector('[data-cat-name]').value.trim();
+    var items = [];
+    block.querySelectorAll('.dynamic-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      var name = inputs[0] ? inputs[0].value.trim() : '';
+      var price = inputs[1] ? inputs[1].value.trim() : '';
+      var desc = inputs[2] ? inputs[2].value.trim() : '';
       if (name) {
-        let l = '  • ' + name;
-        if (price) l += ' — ' + price;
+        var l = '  \u2022 ' + name;
+        if (price) l += ' \u2014 ' + price;
         if (desc) l += ' (' + desc + ')';
         items.push(l);
       }
@@ -1252,51 +1461,61 @@ function buildText() {
     if (catName || items.length) {
       hasMenu = true;
       if (catName) menuLines.push('[' + catName + ']');
-      items.forEach(i => menuLines.push(i));
+      items.forEach(function(i) { menuLines.push(i); });
     }
   });
-  if (hasMenu) { lines.push('── 메뉴 / 서비스 ──'); menuLines.forEach(l => lines.push(l)); lines.push(''); }
-  const locFields = [['주소',v('address')],['찾아오는 길',v('directions')],['영업시간',v('hours')],['휴무일',v('closedDay')],['참고',v('locNote')]].filter(f=>f[1]);
-  if (locFields.length) { lines.push('── 위치 & 영업시간 ──'); locFields.forEach(f=>lines.push(f[0]+': '+f[1])); lines.push(''); }
-  const contacts = [['전화',v('phone')],['카카오톡',v('kakao')],['인스타그램',v('instagram')]].filter(f=>f[1]);
-  if (contacts.length) { lines.push('── 연락처 ──'); contacts.forEach(f=>lines.push(f[0]+': '+f[1])); lines.push(''); }
-  const photos = [];
-  document.querySelectorAll('#photoChecklist input:checked').forEach(el => photos.push(el.value));
-  if (photos.length) { lines.push('── 사진 준비 ──'); photos.forEach(p=>lines.push('✓ '+p)); lines.push(''); }
+  if (hasMenu) { lines.push('\u2500\u2500 \uBA54\uB274 / \uC11C\uBE44\uC2A4 \u2500\u2500'); menuLines.forEach(function(l) { lines.push(l); }); lines.push(''); }
+
+  var locFields = [['\uC8FC\uC18C',v('address')],['\uCC3E\uC544\uC624\uB294 \uAE38',v('directions')],['\uC601\uC5C5\uC2DC\uAC04',v('hours')],['\uD734\uBB34\uC77C',v('closedDay')],['\uCC38\uACE0',v('locNote')]].filter(function(f) { return f[1]; });
+  if (locFields.length) { lines.push('\u2500\u2500 \uC704\uCE58 & \uC601\uC5C5\uC2DC\uAC04 \u2500\u2500'); locFields.forEach(function(f) { lines.push(f[0]+': '+f[1]); }); lines.push(''); }
+
+  var photos = [];
+  document.querySelectorAll('#photoChecklist input:checked').forEach(function(el) { photos.push(el.value); });
+  if (photos.length) { lines.push('\u2500\u2500 \uC0AC\uC9C4 \uC900\uBE44 \u2500\u2500'); photos.forEach(function(p) { lines.push('\u2713 '+p); }); lines.push(''); }
+
+  // Reviews (both tiers)
+  var reviewItems = [];
+  document.querySelectorAll('#reviewRows .dynamic-row').forEach(function(row) {
+    var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+    var who = inputs[0] ? inputs[0].value.trim() : '';
+    var text = inputs[1] ? inputs[1].value.trim() : '';
+    if (who || text) reviewItems.push('\u2022 ' + (who ? who + ': ' : '') + text);
+  });
+  if (reviewItems.length) { lines.push('\u2500\u2500 \uACE0\uAC1D \uD6C4\uAE30 \u2500\u2500'); reviewItems.forEach(function(r) { lines.push(r); }); lines.push(''); }
+
+  var faqItems = [];
+  document.querySelectorAll('#faqRows .dynamic-row').forEach(function(row) {
+    var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+    var q = inputs[0] ? inputs[0].value.trim() : '';
+    var a = inputs[1] ? inputs[1].value.trim() : '';
+    if (q) { faqItems.push('Q. ' + q); if (a) faqItems.push('A. ' + a); faqItems.push(''); }
+  });
+  if (faqItems.length) { lines.push('\u2500\u2500 FAQ \u2500\u2500'); faqItems.forEach(function(f) { lines.push(f); }); }
+
+  // Staff (basic only)
   if (currentTier === 'basic') {
-    const staffItems = [];
-    document.querySelectorAll('#staffRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const name = inputs[0]?.value.trim()||''; const role = inputs[1]?.value.trim()||''; const desc = inputs[2]?.value.trim()||'';
-      if (name) { let l='• '+name; if(role) l+=' ('+role+')'; if(desc) l+=' — '+desc; staffItems.push(l); }
+    var staffItems = [];
+    document.querySelectorAll('#staffRows .dynamic-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
+      var name = inputs[0] ? inputs[0].value.trim() : '';
+      var role = inputs[1] ? inputs[1].value.trim() : '';
+      var desc = inputs[2] ? inputs[2].value.trim() : '';
+      if (name) { var l = '\u2022 ' + name; if (role) l += ' (' + role + ')'; if (desc) l += ' \u2014 ' + desc; staffItems.push(l); }
     });
-    if (staffItems.length) { lines.push('── 스태프 소개 ──'); staffItems.forEach(s=>lines.push(s)); lines.push(''); }
-    const reviewItems = [];
-    document.querySelectorAll('#reviewRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const who = inputs[0]?.value.trim()||''; const text = inputs[1]?.value.trim()||'';
-      if (who||text) reviewItems.push('• '+(who?who+': ':'')+text);
-    });
-    if (reviewItems.length) { lines.push('── 고객 후기 ──'); reviewItems.forEach(r=>lines.push(r)); lines.push(''); }
-    const faqItems = [];
-    document.querySelectorAll('#faqRows .dynamic-row').forEach(row => {
-      const inputs = row.querySelectorAll('input[data-save], textarea[data-save]');
-      const q = inputs[0]?.value.trim()||''; const a = inputs[1]?.value.trim()||'';
-      if (q) { faqItems.push('Q. '+q); if(a) faqItems.push('A. '+a); faqItems.push(''); }
-    });
-    if (faqItems.length) { lines.push('── FAQ ──'); faqItems.forEach(f=>lines.push(f)); }
+    if (staffItems.length) { lines.push('\u2500\u2500 \uC2A4\uD0DC\uD504 \uC18C\uAC1C \u2500\u2500'); staffItems.forEach(function(s) { lines.push(s); }); lines.push(''); }
   }
-  if (v('extra')) { lines.push('── 기타 요청사항 ──'); lines.push(v('extra')); lines.push(''); }
+
+  if (v('extra')) { lines.push('\u2500\u2500 \uAE30\uD0C0 \uC694\uCCAD\uC0AC\uD56D \u2500\u2500'); lines.push(v('extra')); lines.push(''); }
   lines.push('========================================');
   return lines.join('\n');
 }
 
 function copyText() {
-  const text = buildText();
+  var text = buildText();
   try {
     return navigator.clipboard.writeText(text);
   } catch (e) {
-    const ta = document.createElement('textarea');
+    var ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;left:-9999px';
     document.body.appendChild(ta);
@@ -1307,55 +1526,98 @@ function copyText() {
   }
 }
 
-document.getElementById('btnCopy').addEventListener('click', () => {
-  copyText().then(() => showToast('의뢰서가 복사되었습니다!')).catch(() => showToast('의뢰서가 복사되었습니다!'));
+document.getElementById('btnCopy').addEventListener('click', function() {
+  copyText().then(function() { showToast('\uC758\uB8B0\uC11C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4!'); }).catch(function() { showToast('\uC758\uB8B0\uC11C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4!'); });
 });
 
-document.getElementById('btnKakao').addEventListener('click', () => {
+document.getElementById('btnKakao').addEventListener('click', function() {
   copyText();
   window.open('https://pf.kakao.com/_zAqqX/chat', '_blank', 'noopener,noreferrer');
 });
 
-document.getElementById('btnReset').addEventListener('click', () => {
-  if (!confirm('작성한 내용이 모두 삭제됩니다. 처음부터 다시 작성하시겠습니까?')) return;
+document.getElementById('btnReset').addEventListener('click', function() {
+  if (!confirm('\uC791\uC131\uD55C \uB0B4\uC6A9\uC774 \uBAA8\uB450 \uC0AD\uC81C\uB429\uB2C8\uB2E4. \uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC \uC791\uC131\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?')) return;
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   location.reload();
 });
 
 function showToast(msg) {
-  const el = document.getElementById('toast');
+  var el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
+  setTimeout(function() { el.classList.remove('show'); }, 2500);
 }
 
 document.getElementById('mainForm').addEventListener('input', function(e) {
   scheduleSave();
-  const field = e.target.closest('.field');
+  var field = e.target.closest('.field');
   if (field) field.classList.remove('has-error');
 });
 document.getElementById('mainForm').addEventListener('change', scheduleSave);
 
 /* ===== TOUCH SWIPE (mobile) ===== */
-let touchStartX = 0;
-let touchStartY = 0;
+var touchStartX = 0;
+var touchStartY = 0;
 document.addEventListener('touchstart', function(e) {
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
 document.addEventListener('touchend', function(e) {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
+  var dx = e.changedTouches[0].clientX - touchStartX;
+  var dy = e.changedTouches[0].clientY - touchStartY;
   if (Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx)) return;
-  const steps = getSteps();
+  var steps = getSteps();
   if (steps[currentStepIdx] === 'review' || steps[currentStepIdx] === 'tier') return;
   if (dx > 0) goPrev();
   else goNext();
 }, { passive: true });
 
+/* ===== URL PARAMETER HANDLING ===== */
+function handleURLParams() {
+  var params = new URLSearchParams(location.search);
+  var tierParam = params.get('tier');
+  var designParam = params.get('design');
+
+  if (tierParam === 'light' || tierParam === 'basic') {
+    currentTier = tierParam;
+    tierCards.forEach(function(c) { c.classList.toggle('selected', c.dataset.tier === tierParam); });
+    if (tierParam === 'light') { designLight.classList.remove('hidden'); designBasic.classList.add('hidden'); }
+    else { designLight.classList.add('hidden'); designBasic.classList.remove('hidden'); }
+    tierNextBtn.style.opacity = '1';
+    tierNextBtn.style.pointerEvents = 'auto';
+    tierNextBtn.textContent = (tierParam === 'light' ? 'Light' : 'Basic') + ' \uC120\uD0DD \u2192';
+    tierNextBtn.onclick = function() { goTo(1); };
+
+    // Auto-advance to step 1
+    goTo(1);
+  }
+
+  if (designParam) {
+    document.querySelectorAll('.design-card').forEach(function(card) {
+      if (card.dataset.design.indexOf(designParam) >= 0) {
+        card.classList.add('selected');
+      }
+    });
+  }
+}
+
 /* ===== INIT ===== */
-loadForm();
+var hasSavedData = false;
+try { hasSavedData = !!localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+if (hasSavedData) {
+  loadForm();
+} else {
+  handleURLParams();
+}
+
 updateIndicator();
+
+// Hide basic-only sections on init
+var basicOnlyOpts = document.querySelectorAll('.basic-only-opt');
+basicOnlyOpts.forEach(function(el) {
+  el.style.display = currentTier === 'basic' ? '' : 'none';
+});
 </script>
 </body>
 </html>
